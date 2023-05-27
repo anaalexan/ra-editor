@@ -13,6 +13,12 @@ class CMenuBase{
         void printText(){
            cout << m_menuText << endl;
         }
+        virtual int execute(){
+            printText();
+            int choice = 0;
+            cin >> choice;
+            return choice;
+        }
     protected:
         string m_menuText;
 

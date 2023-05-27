@@ -9,10 +9,10 @@ void CApplication::run(){
     CMenuBase * aCurrentMenu = new CMainMenu;
     bool isExitSelected = false;
     while (!isExitSelected){
-        aCurrentMenu->printText();
+        //aCurrentMenu->printText(); // potom zbytecny
 
-        int choice = 0;
-        cin >> choice;
+        int choice;
+        choice = aCurrentMenu->execute();
 
         CMenuBase * aNewMenuPointer = aCurrentMenu->getNextMenu(choice, isExitSelected);
 

@@ -1,5 +1,11 @@
 #include "MenuRAeditor.h"
 #include <memory>
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <string>
+#include <cstring>
+#include <algorithm>
 #include "CrossJoin.h"
 #include "Difference.h"
 #include "Intersection.h"
@@ -12,9 +18,83 @@
 using namespace std;
 
 CMenuRAeditor::CMenuRAeditor(){
-        m_menuText = string("Main RA editor\n"
-            "Select 1 for return to Main enu\n" 
-            "Your selection: ");
+        m_menuText = string("RA editor\n"
+            "For return to main menu write EXIT.\n");
+}
+
+EKeywords CMenuRAeditor::stringToEnum(const string & word){
+    if(word == "EXIT"){
+        return EKeywords::eEXIT;
+    }
+    if(word == "IMPORT"){
+        return EKeywords::eIMPORT;
+    }
+    if(word == "PRINT"){
+        return EKeywords::ePRINT;
+    }
+    if(word == "EXPORT"){
+        return EKeywords::eEXPORT;
+    }
+    if(word == "TRANSLATE"){
+        return EKeywords::eTRANSLATE;
+    }
+}
+
+string toUpperCase(string input){
+    for(auto i = input.begin(); i < input.end(); i++){
+        std::transform(input.begin(), input.end(), input.begin(), ::toupper);
+    }
+    return input;
+}
+
+int CMenuRAeditor::execute(){
+    printText();
+    
+    bool exit = false;
+
+    while(exit != true){
+
+        string line;
+        getline(cin, line);
+        stringstream ss(line);
+        string key;
+        getline(ss, key, ' '); 
+
+        switch(stringToEnum(toUpperCase(key))){
+            case(EKeywords::eEXIT):{
+                exit = true;
+                break;
+            }
+            case(EKeywords::eIMPORT):{
+                break;
+            }
+            case(EKeywords::ePRINT):{
+                break;
+            }
+            case(EKeywords::eEXPORT):{
+                break;
+            }
+            case(EKeywords::eTRANSLATE):{
+                break;
+            }
+            default:{
+
+            }
+
+            
+
+        }
+            
+    }
+        
+
+    //swtich case
+
+    
+        int choice = 0;
+        cin >> choice;
+
+        return choice;
 }
 
 CMenuBase * CMenuRAeditor::getNextMenu(int choice, bool & isExitSelected){

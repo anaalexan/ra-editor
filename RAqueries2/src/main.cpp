@@ -6,7 +6,6 @@ int main(){
 
     CApplication().run();
 
-    cout << "POKUS" << endl;
 
     return 0;
 }
