@@ -11,6 +11,7 @@ using namespace std;
 class CToken{		
 	public:
 		enum ETokenType{RELATION, OPERATOR} m_type;
+		
 		shared_ptr<CRelation> m_relation;
 		shared_ptr<COperator> m_operator;
 

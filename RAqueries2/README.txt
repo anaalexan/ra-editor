@@ -48,7 +48,7 @@ Přejmenování        - <současnýNázevSloupce1,novýNázevSloupce1;...;souč
 
 Binární operace:
 Přirozené spojení   - *
-Obecné spojení      - O(podmínka)
+Obecné spojení      - ^(podmínka)
 Průnik              - &
 Sjednocení          - +
 Rozdíl              - -
@@ -66,7 +66,7 @@ POSTFIX zápis   -   LOD REZERVACE * ZAKAZNIK * (JMENO_Z='Iásón')[JMENO_L]<JME
 Dotaz           -   Vyhledá jména lodí, které má rezervované zákazník Iásón, přejmenuje záhlaví sloupce pro jména lodí
                     a sloučí s jinou relací obsahující další lodě rezervované zákazníkem Iásón.
 Příklady editoru:
-R = LOD REZERVACE * ZAKAZNIK * (JMENO_Z='Iásón')[JMENO_L]<JMENO_L;NAZEV_LOD> "IasonShips.csv" +     - uloží výraz do proměnné
+R = LOD REZERVACE * ZAKAZNIK * (JMENO_Z='Iásón') [JMENO_L]<JMENO_L;NAZEV_LOD> "IasonShips.csv" +     - uloží výraz do proměnné
 EXPORT R > IasonShips.csv                                                                           - exportuje výslednou relaci do souboru IasonShips.csv
 
 == Polymorfismus

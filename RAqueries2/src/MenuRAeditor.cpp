@@ -15,6 +15,9 @@
 #include "NaturalJoin.h"
 
 
+#include "Expression.h"
+#include "Variable.h"
+
 using namespace std;
 
 CMenuRAeditor::CMenuRAeditor(){
@@ -38,6 +41,7 @@ EKeywords CMenuRAeditor::stringToEnum(const string & word){
     if(word == "TRANSLATE"){
         return EKeywords::eTRANSLATE;
     }
+    return EKeywords::eTRANSLATE;
 }
 
 string toUpperCase(string input){
@@ -52,7 +56,7 @@ int CMenuRAeditor::execute(){
     
     bool exit = false;
 
-    while(exit != true){
+    /*while(exit != true){
 
         string line;
         getline(cin, line);
@@ -66,6 +70,11 @@ int CMenuRAeditor::execute(){
                 break;
             }
             case(EKeywords::eIMPORT):{
+                string word,path;
+                getline(ss, word, ' ');
+                getline(ss, path, ' ');
+                CVariable var(word, path);
+
                 break;
             }
             case(EKeywords::ePRINT):{
@@ -85,7 +94,7 @@ int CMenuRAeditor::execute(){
 
         }
             
-    }
+    }*/
         
 
     //swtich case
@@ -115,13 +124,13 @@ CMenuBase * CMenuRAeditor::getNextMenu(int choice, bool & isExitSelected){
 //**************************************
 
 // testing if crossJoin work
-CRelation rel1("/home/progtest/Downloads/rel1.csv");
+/*CRelation rel1("/home/progtest/Downloads/rel1.csv");
 CRelation rel2("/home/progtest/Downloads/rel2.csv");
 CFileService file;
 shared_ptr<CRelation> sptr1 = make_shared<CRelation>(rel1);
 file.importFromFile(sptr1);
 shared_ptr<CRelation> sptr2 = make_shared<CRelation>(rel2);
-file.importFromFile(sptr2);
+file.importFromFile(sptr2);*/
 
 /*CCrossJoin spoj;
 vector<shared_ptr<CRelation>> vec = {sptr1,sptr2};
@@ -165,12 +174,34 @@ shared_ptr<CRelation> sptr = make_shared<CRelation>(res);
 sptr = project.evaluate(vec);
 file.exportToFile(sptr);*/
 
-CNaturalJoin spoj;
+/*CNaturalJoin spoj;
 vector<shared_ptr<CRelation>> vec = {sptr1,sptr2};
 CRelation res("/home/progtest/Downloads/res.csv");
 shared_ptr<CRelation> sptr = make_shared<CRelation>(res);
 sptr = spoj.evaluate(vec);
-file.exportToFile(sptr);
+file.exportToFile(sptr);*/
+
+
+
+
+vector<CVariable> vec;
+CExpression lodExp("\"lod1.csv\" x \"lod2.csv\"", vec);
+CVariable lod("LOD", make_shared<CExpression>(lodExp));
+vec.push_back(lod);
+CExpression RezervaceExp("\"rez1.csv\" - \"rez2.csv\"", vec);
+CVariable rezervace("REZERVACE", make_shared<CExpression>(RezervaceExp));
+vec.push_back(rezervace);
+CExpression zakaznikExp("\"zak1.csv\" & \"zak2.csv\"", vec);
+CVariable zakaznik("ZAKAZNIK", make_shared<CExpression>(RezervaceExp));
+vec.push_back(zakaznik);
+
+
+string exp = "LOD REZERVACE * ZAKAZNIK * (JMENO_Z='Iásón') [JMENO_L]<JMENO_L;NAZEV_LOD> \"IasonShips.csv\" +";
+CExpression expression(exp, vec);
+
+CRelation relation("/home/progtest/Downloads/testInput.csv");
+
+
 
 //end of test
 

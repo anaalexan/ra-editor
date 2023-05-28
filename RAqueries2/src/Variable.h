@@ -3,9 +3,11 @@
 #include <string>
 #include <memory>
 
-#include "Expression.h"
+//#include "Expression.h"
 
 using namespace std;
+
+class CExpression;
 
 class CVariable{        
     public:

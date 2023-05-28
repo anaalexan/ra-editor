@@ -7,17 +7,20 @@
 
 #include "Token.h"
 #include "Relation.h"
+#include "KeyRA.h"
+//#include "Variable.h"
 
+class CVariable;
 
 class CExpression{
 	public:
-		CExpression (const string & expression)
-		:m_tokens(){tokenize(expression);};
+		CExpression (const string & expression, const vector<CVariable> & variables)
+		:m_tokens(){tokenize(expression, variables);};
 
-	    shared_ptr<CRelation> evaluate();		
+	    shared_ptr<CRelation> evaluate();	
 	private:
-		void tokenize(const string & expression);
+		EKeyRA charToEnum(char c);
+		void tokenize(const string & expression, const vector<CVariable> & variables);
 
 		vector<shared_ptr<CToken>> m_tokens;
-
 };

@@ -1,10 +1,12 @@
 
 #include <sstream>
 #include <cstdio> 
+#include <iostream>
 
 #include "Expression.h"
 #include "KeyRA.h"
 #include "Token.h"
+#include "Variable.h"
 
 #include "CrossJoin.h"
 #include "Difference.h"
@@ -38,7 +40,7 @@ EKeyRA CExpression::charToEnum(char c){
     if(c == '<'){
         return EKeyRA::Rename;
     }
-    if(c == 'x'){
+    if(c == '('){
         return EKeyRA::Selection;
     }
     if(c == '^'){
@@ -50,38 +52,42 @@ EKeyRA CExpression::charToEnum(char c){
     if(c == ' '){
         return EKeyRA::Space ;
     }
+    if(c == '\"'){
+        return EKeyRA::Quots ;
+    }
+    return EKeyRA::NoMatch;
 }
 
-void CExpression::tokenize(const string & expression){
-    string word;
+void CExpression::tokenize(const string & expression, const vector<CVariable> & variables){
+    
     for(size_t i = 0; i < expression.size(); i++){
         switch(charToEnum(expression[i])){
             
             case(EKeyRA::CrossJoin):
             {
                 CCrossJoin op;
-                CToken tok (CToken::ETokenType::OPERATOR, make_shared<COperator>(op)) ;
+                CToken tok (CToken::ETokenType::OPERATOR, make_shared<CCrossJoin>(op)) ;
                 m_tokens.push_back(make_shared<CToken>(tok));
                 break;
             }
             case(EKeyRA::Difference):
             {
                 CDifference op;
-                CToken tok (CToken::ETokenType::OPERATOR, make_shared<COperator>(op)) ;
+                CToken tok (CToken::ETokenType::OPERATOR, make_shared<CDifference>(op)) ;
                 m_tokens.push_back(make_shared<CToken>(tok));
                 break;
             }
             case(EKeyRA::Intersection):
             {
                 CIntersection op;
-                CToken tok (CToken::ETokenType::OPERATOR, make_shared<COperator>(op)) ;
+                CToken tok (CToken::ETokenType::OPERATOR, make_shared<CIntersection>(op)) ;
                 m_tokens.push_back(make_shared<CToken>(tok));
                 break;
             }
             case(EKeyRA::NaturalJoin):
             {
                 CNaturalJoin op;
-                CToken tok (CToken::ETokenType::OPERATOR, make_shared<COperator>(op)) ;
+                CToken tok (CToken::ETokenType::OPERATOR, make_shared<CNaturalJoin>(op)) ;
                 m_tokens.push_back(make_shared<CToken>(tok));
                 break;
             }
@@ -89,13 +95,13 @@ void CExpression::tokenize(const string & expression){
             {
                 i++;
                 string columnNames;
-                while(expression[i] != ']'){
+                while(expression[i+1] != ']'){
                     columnNames.push_back(expression[i]);
                     i++;
                 }
-                i--;
+                i++;
                 CProjection op(columnNames);
-                CToken tok (CToken::ETokenType::OPERATOR, make_shared<COperator>(op)) ;
+                CToken tok (CToken::ETokenType::OPERATOR, make_shared<CProjection>(op)) ;
                 m_tokens.push_back(make_shared<CToken>(tok));
                 break;
             }
@@ -103,13 +109,13 @@ void CExpression::tokenize(const string & expression){
             {
                 i++;
                 string columnNames;
-                while(expression[i] != '>'){
+                while(expression[i+1] != '>'){
                     columnNames.push_back(expression[i]);
                     i++;
                 }
-                i--;
+                i++;
                 CRename op(columnNames);
-                CToken tok (CToken::ETokenType::OPERATOR, make_shared<COperator>(op)) ;
+                CToken tok (CToken::ETokenType::OPERATOR, make_shared<CRename>(op)) ;
                 m_tokens.push_back(make_shared<CToken>(tok));
                 break;
             }
@@ -118,19 +124,19 @@ void CExpression::tokenize(const string & expression){
                 i++;
                 string condition;
                 int cnt = 0;
-                while(expression[i] != ')' && cnt == 0){
-                    if(expression[i] != '('){
+                while(expression[i+1] != ')' && cnt == 0){
+                    if(expression[i+1] == '('){
                         cnt++;
                     }
-                    if(expression[i] != ')'){
+                    if(expression[i+1] == ')'){
                         cnt--;
                     }
                     condition.push_back(expression[i]);
                     i++;
                 }
-                i--;
+                i++;
                 CSelection op(condition);
-                CToken tok (CToken::ETokenType::OPERATOR, make_shared<COperator>(op)) ;
+                CToken tok (CToken::ETokenType::OPERATOR, make_shared<CSelection>(op)) ;
                 m_tokens.push_back(make_shared<CToken>(tok));
                 break;
 
@@ -138,44 +144,79 @@ void CExpression::tokenize(const string & expression){
             case(EKeyRA::ThetaJoin):
             {
                 i++;
-                while(expression[i] == ' ' ){
+                while(expression[i] == ' '){
                     i++;
                 }
                 string condition;
                 int cnt = 0;
-                while(expression[i] != ')' && cnt == 0){
-                    if(expression[i] != '('){
+                while(expression[i+1] != ')' && cnt == 0){
+                    if(expression[i+1] == '('){
                         cnt++;
                     }
-                    if(expression[i] != ')'){
+                    if(expression[i+1] == ')'){
                         cnt--;
                     }
                     condition.push_back(expression[i]);
                     i++;
                 }
-                i--;
+                i++;
                 CThetaJoin op(condition);
-                CToken tok (CToken::ETokenType::OPERATOR, make_shared<COperator>(op)) ;
+                CToken tok (CToken::ETokenType::OPERATOR, make_shared<CThetaJoin>(op)) ;
                 m_tokens.push_back(make_shared<CToken>(tok));
                 break;
             }
             case(EKeyRA::Union):
             {
                 CUnion op;
-                CToken tok (CToken::ETokenType::OPERATOR, make_shared<COperator>(op)) ;
+                CToken tok (CToken::ETokenType::OPERATOR, make_shared<CUnion>(op)) ;
+                m_tokens.push_back(make_shared<CToken>(tok));
+                break;
+            }
+            case(EKeyRA::Quots):
+            {
+                string path;
+                cout << expression[i] << endl;
+                i++;
+                while(expression[i] != '"'){
+                    path.push_back(expression[i]);
+                    i++;
+                }
+                CRelation rel(path);
+                CToken tok (CToken::ETokenType::RELATION, make_shared<CRelation>(rel)) ;
                 m_tokens.push_back(make_shared<CToken>(tok));
                 break;
             }
             case(EKeyRA::Space):
             {
-
                 break;
             }
+            
             default:
             {
-                nevim
+                string word;
+                while(expression[i+1] != ' ' && expression[i+1] != '(' && expression[i+1] != '[' && expression[i+1] != '<' && expression[i+1] != '*'
+                && expression[i+1] != '^' && expression[i+1] != '&' && expression[i+1] != '+' && expression[i+1] != '-' && expression[i+1] != 'x'){
+                    word.push_back(expression[i]);
+                    i++;
+                }
                 word.push_back(expression[i]);
+                i++;
+                bool isHere = false;
+                for(size_t j = 0; j < variables.size(); j++){
+                    if(variables[j].m_name == word){
+                        isHere = true;
+                        for(size_t t = 0; t < variables[j].m_expression->m_tokens.size(); t++){
+                            m_tokens.push_back(variables[j].m_expression->m_tokens[t]);
+                        }
+                        break;
+                    }
+                    if(j == variables.size()-1 && isHere == false){
+                        cout << "There is no variable with the name: " << word << endl;
+                    }
+                }
+
             }
         }
     }
+    cout << "end" << endl;
 }
