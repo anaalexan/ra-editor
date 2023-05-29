@@ -13,6 +13,7 @@ class CSelection : public COperator{
         };
 
         virtual shared_ptr<CRelation> evaluate(vector<shared_ptr<CRelation>> & relations) override;
+        shared_ptr<CRelation> evaluate(const string & path);
     private:
-        vector<string> m_conditions;
+        CConditionParser::CCondition m_conditions;
 };
