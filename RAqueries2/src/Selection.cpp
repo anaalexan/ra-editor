@@ -78,9 +78,11 @@ shared_ptr<CRelation> CSelection::evaluate(const string & path){
                 }
             }
             
-            if(compare.evaluate(convert.whatType(m_conditions.right), convert.whatType(row.m_values[indexR]), m_conditions.m_operator)){
+            
+            if(compare.evaluate(convert.whatType(row.m_values[indexL]), convert.whatType(row.m_values[indexR]), m_conditions.m_operator)){
                 res.m_rows.push_back(row);
             }
+            
             
 
         }
@@ -127,6 +129,7 @@ shared_ptr<CRelation> CSelection::evaluate(vector<shared_ptr<CRelation>> & relat
             }
         }else{
             size_t indexR;
+            //check if relation contains the atribute from condition
             for(size_t j = 0; j < res.m_rows[0].m_values.size(); j++){
                 if(m_conditions.right == res.m_rows[0].m_values[j]){
                     isHere = true;
@@ -138,9 +141,9 @@ shared_ptr<CRelation> CSelection::evaluate(vector<shared_ptr<CRelation>> & relat
                     return nullptr;
                 }
             }
-            for(size_t j = 0; j < res.m_rows.size(); j++){
-                if(compare.evaluate(convert.whatType(m_conditions.right), convert.whatType(res.m_rows[j].m_values[indexR]), m_conditions.m_operator)){
-                    res.m_rows.push_back(res.m_rows[j]);
+            for(size_t j = 0; j < relations[0]->m_rows.size(); j++){
+                if(compare.evaluate(convert.whatType(m_conditions.right), convert.whatType(relations[0]->m_rows[j].m_values[indexR]), m_conditions.m_operator)){
+                    res.m_rows.push_back(relations[0]->m_rows[j]);
                 }
             }
         }
