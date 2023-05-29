@@ -1,6 +1,8 @@
 #include "Projection.h"
+#include "FileService.h"
 #include <iostream>
 #include  <sstream>
+#include <fstream>
 
 using namespace std;
 
@@ -11,40 +13,197 @@ void CProjection::parse(const string & columnNames){
         m_columnNames.push_back(word);
     }
 }
-
-shared_ptr<CRelation> CProjection::evaluate(vector<shared_ptr<CRelation>> & relations){
+shared_ptr<CRelation> CProjection::evaluate(const string & path){
+    /*shared_ptr<CRelation> sptr1;
+    CFileService file;
+    sptr1 = make_shared<CRelation>(path);
+    file.importFromFile(sptr1);*/
+    ifstream fin(path);
+    string line, word;
     CRelation res;
+
+    if(!fin.is_open()){
+        cout << "Could not open file" << endl;
+        return nullptr;
+    }
+    
+    getline(fin, line);
     bool isHere = false;
+    vector<size_t> indexes;
     for(size_t i = 0; i < m_columnNames.size(); i++){
-        CRow rowName;
-        isHere = false;
-        for(size_t cnt = 0; cnt < relations[0]->m_rows[0].m_values.size(); cnt++){
-            if(m_columnNames[i] == relations[0]->m_rows[0].m_values[cnt]){
-                if(i != 0){
-                    res.m_rows[0].m_values.push_back(relations[0]->m_rows[0].m_values[cnt]);
-                }else{
-                    rowName.m_values.push_back(relations[0]->m_rows[0].m_values[cnt]);
-                    res.m_rows.push_back(rowName);
-                }
-                for(size_t row_cnt = 1; row_cnt < relations[0]->m_rows.size(); row_cnt++){
-                    string word = relations[0]->m_rows[row_cnt].m_values[cnt];
-                    if(i != 0){
-                        res.m_rows[row_cnt].m_values.push_back(word);
+        stringstream ss(line);
+        CRow row;
+        size_t idx = 0;
+        while (getline(ss, word, ',')){
+            
+            if(word == m_columnNames[i]){
 
-                    }else{
-                    CRow col;
-                    col.m_values.push_back(relations[0]->m_rows[row_cnt].m_values[cnt]);
-                    res.m_rows.push_back(col);
-                    }
-                    isHere = true;
-
-                }
+                //save indexes of atributes to project into vector 
+                indexes.push_back(idx);
+                //save name of atributes to project into final relation
+                row.m_values.push_back(word);
+                idx++;
+                isHere = true;
                 break;
             }
-            if(cnt == relations[0]->m_rows[0].m_values.size() - 1 && isHere == false){
-                cout << "Name of the column, that you want to project: " <<  "\"" << m_columnNames[i] << "\" has not been found in the relation" << endl;
-            }
         }
+        if(isHere == false){
+            cout << "Name of the column, that you want to project: " <<  "\"" << m_columnNames[i] << "\" has not been found in the relation" << endl;
+        }
+        res.m_rows.push_back(row);
+
     }
+    while(getline(fin, line)){
+        vector<string> vecLine;
+        stringstream ss(line);
+
+        //line from fin transform into vector
+        while (getline(ss, word, ',')){
+            vecLine.push_back(word);
+        }
+        CRow row;
+        //create a single row from projection
+        for(size_t i = 0; i < indexes.size(); i++){
+            row.m_values.push_back(vecLine[i]);
+        }
+        isHere = false;
+
+        //cheking for duplicates rows
+        for(size_t i = 1; i < res.m_rows.size(); i++){
+            for(size_t j = 0; i < res.m_rows[0].m_values.size(); i++){
+                if(res.m_rows[i].m_values[0] == row.m_values[0]){
+                    while(res.m_rows[i].m_values[j] != row.m_values[j] || j == res.m_rows[0].m_values.size()-1){
+                        j++;
+                    }
+                    if(res.m_rows[i].m_values[j] != row.m_values[j]){
+                        
+                        break;
+                    }
+                    if(j == res.m_rows[0].m_values.size()-1){
+                        isHere = true;
+                    }
+                }else{
+                    break;
+                }
+            }
+            if(isHere == true){
+                break;
+            }
+            //save row into final relation if final relation does not contain  the same row
+            if(isHere == false && i == res.m_rows.size()-1){
+                res.m_rows.push_back(row);
+            }
+            
+        }
+
+    }
+    fin.close();
     return make_shared<CRelation>(res);
 }
+
+
+shared_ptr<CRelation> CProjection::evaluate(vector<shared_ptr<CRelation>> & relations){
+    
+    if(relations[0]->getPath().size() != 0){
+
+        return evaluate(relations[0]->getPath());
+
+    }else{
+
+        CRelation res;
+        vector<size_t> indexes;
+        bool isHere = false;
+
+        //search for an atributres for projection
+        for(size_t i = 0; i < m_columnNames.size(); i++){
+            CRow rowName;
+            isHere = false;
+            for(size_t cnt = 0; cnt < relations[0]->m_rows[0].m_values.size(); cnt++){
+                if(m_columnNames[i] == relations[0]->m_rows[0].m_values[cnt]){
+                    isHere = true;
+
+                    //copy name of the atribute into final relation
+                    rowName.m_values.push_back(relations[0]->m_rows[0].m_values[cnt]);
+
+                    //save index for copyed atributes 
+                    indexes.push_back(cnt);
+                    break;
+                }
+                if(cnt == relations[0]->m_rows[0].m_values.size() - 1 && isHere == false){
+                    cout << "Name of the column, that you want to project: " <<  "\"" << m_columnNames[i] << "\" has not been found in the relation" << endl;
+                }
+            }
+        }
+
+    
+        CRow row;
+        //create a single row from projection
+        for(size_t idx = 0; idx < indexes.size(); idx++){
+            row.m_values.push_back(relations[0]->m_rows[0].m_values[idx]);
+        }
+        isHere = false;
+
+        //cheking for duplicates rows
+        for(size_t i = 1; i < res.m_rows.size(); i++){
+            for(size_t j = 0; i < res.m_rows[0].m_values.size(); i++){
+                if(res.m_rows[i].m_values[0] == row.m_values[0]){
+                    while(res.m_rows[i].m_values[j] != row.m_values[j] || j == res.m_rows[0].m_values.size()-1){
+                        j++;
+                    }
+                    if(res.m_rows[i].m_values[j] != row.m_values[j]){
+                        
+                        break;
+                    }
+                    if(j == res.m_rows[0].m_values.size()-1){
+                        isHere = true;
+                    }
+                }else{
+                    break;
+                }
+            }
+            if(isHere == true){
+                break;
+            }
+            //save row into final relation if final relation does not already contain  the same row
+            if(isHere == false && i == res.m_rows.size()-1){
+                res.m_rows.push_back(row);
+            }   
+        }
+        return make_shared<CRelation>(res);
+    }
+}
+
+        /*bool isHere = false;
+        for(size_t i = 0; i < m_columnNames.size(); i++){
+            CRow rowName;
+            isHere = false;
+            for(size_t cnt = 0; cnt < relations[0]->m_rows[0].m_values.size(); cnt++){
+                if(m_columnNames[i] == relations[0]->m_rows[0].m_values[cnt]){
+                    if(i != 0){
+                        res.m_rows[0].m_values.push_back(relations[0]->m_rows[0].m_values[cnt]);
+                    }else{
+                        rowName.m_values.push_back(relations[0]->m_rows[0].m_values[cnt]);
+                        res.m_rows.push_back(rowName);
+                    }
+                    for(size_t row_cnt = 1; row_cnt < relations[0]->m_rows.size(); row_cnt++){
+                        string word = relations[0]->m_rows[row_cnt].m_values[cnt];
+                        if(i != 0){
+                            res.m_rows[row_cnt].m_values.push_back(word);
+
+                        }else{
+                        CRow col;
+                        col.m_values.push_back(relations[0]->m_rows[row_cnt].m_values[cnt]);
+                        res.m_rows.push_back(col);
+                        }
+                        isHere = true;
+
+                    }
+                    break;
+                }
+                if(cnt == relations[0]->m_rows[0].m_values.size() - 1 && isHere == false){
+                    cout << "Name of the column, that you want to project: " <<  "\"" << m_columnNames[i] << "\" has not been found in the relation" << endl;
+                }
+            }
+        }*/
+        
+  

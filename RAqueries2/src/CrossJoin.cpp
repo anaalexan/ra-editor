@@ -1,25 +1,30 @@
 
 
 #include "CrossJoin.h"
+#include "FileService.h"
+#include "Operator.h"
 
 using namespace std;
 
 
 shared_ptr<CRelation> CCrossJoin::evaluate(vector<shared_ptr<CRelation>> & relations) {
+    shared_ptr<CRelation> sptr1 = importRelation(relations[0]);
+    shared_ptr<CRelation> sptr2 = importRelation(relations[1]);
+    
     CRelation res;
 
     //copy first relation into final relation        
-    for(size_t i = 0; i < relations[0]->m_rows.size(); i++){
+    for(size_t i = 0; i < sptr1->m_rows.size(); i++){
         CRow row;
-        for(size_t j = 0; j < relations[0]->m_rows[0].m_values.size(); j++){
-           string word = relations[0]->m_rows[i].m_values[j];
+        for(size_t j = 0; j < sptr1->m_rows[0].m_values.size(); j++){
+           string word = sptr1->m_rows[i].m_values[j];
            row.m_values.push_back(word);
 
         }
         if(i != 0){
             //copy rows from first relation, as many times as it has rows in second relation
                 //rows2 = row in second relation
-            for(size_t row2 = 0; row2 < size(relations[1]->m_rows[0].m_values); row2++){
+            for(size_t row2 = 0; row2 < size(sptr2->m_rows[0].m_values); row2++){
                 res.m_rows.push_back(row);
             }
         }else{
@@ -30,18 +35,18 @@ shared_ptr<CRelation> CCrossJoin::evaluate(vector<shared_ptr<CRelation>> & relat
 
     for(size_t row = 0; row < res.m_rows.size(); row++){
         if(row != 0){
-            for(size_t i = 1; i < relations[1]->m_rows.size(); i++){
-                for(size_t row2 = 0; row2 < relations[1]->m_rows[0].m_values.size(); row2++){
-                    res.m_rows[row].m_values.push_back(relations[1]->m_rows[i].m_values[row2]);
+            for(size_t i = 1; i < sptr2->m_rows.size(); i++){
+                for(size_t row2 = 0; row2 < sptr2->m_rows[0].m_values.size(); row2++){
+                    res.m_rows[row].m_values.push_back(sptr2->m_rows[i].m_values[row2]);
                     
                 }
-                if(i != relations[1]->m_rows.size()-1){
+                if(i != sptr2->m_rows.size()-1){
                     row++;
                 }
             }
         }else{
-            for(size_t row2 = 0; row2 < relations[1]->m_rows[0].m_values.size(); row2++){
-                res.m_rows[0].m_values.push_back(relations[1]->m_rows[0].m_values[row2]);
+            for(size_t row2 = 0; row2 < sptr2->m_rows[0].m_values.size(); row2++){
+                res.m_rows[0].m_values.push_back(sptr2->m_rows[0].m_values[row2]);
             }
         }
         

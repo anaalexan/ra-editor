@@ -175,7 +175,6 @@ void CExpression::tokenize(const string & expression, const vector<CVariable> & 
             case(EKeyRA::Quots):
             {
                 string path;
-                cout << expression[i] << endl;
                 i++;
                 while(expression[i] != '"'){
                     path.push_back(expression[i]);
@@ -219,4 +218,35 @@ void CExpression::tokenize(const string & expression, const vector<CVariable> & 
         }
     }
     cout << "end" << endl;
+}
+
+
+shared_ptr<CRelation> CExpression::evaluate(){
+    vector<shared_ptr<CRelation>> stack;
+    for(size_t i = 0; i < m_tokens.size(); i++){
+        if(m_tokens[i]->m_type ==  CToken::ETokenType::RELATION){
+            stack.push_back(m_tokens[i]->m_relation);
+        }
+        if(m_tokens[i]->m_type ==  CToken::ETokenType::OPERATOR){
+            vector<shared_ptr<CRelation>> relations;
+            if(m_tokens[i]->m_operator->m_type == COperator::EOperatorType::BINARY){
+                relations.push_back(*(stack.end()-2));
+                relations.push_back(*(stack.end()-1));
+            }
+            if(m_tokens[i]->m_operator->m_type == COperator::EOperatorType::UNARY){
+                
+                relations.push_back(*(stack.end()-1));
+            }
+            
+            shared_ptr<CRelation> res;
+            res = m_tokens[i]->m_operator->evaluate(relations);
+            stack.push_back(res);
+        }
+    }
+    if(m_tokens.size() != 0 || stack.size() != 1){
+        cout << "Error. Wrong number of operators or operands." << endl;
+    }else{
+        return stack[0];
+    }
+    
 }

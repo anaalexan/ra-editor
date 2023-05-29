@@ -1,10 +1,13 @@
 #include "Difference.h"
 
+
 using namespace std;
 
 shared_ptr<CRelation> CDifference::evaluate(vector<shared_ptr<CRelation>> & relations) {
+    shared_ptr<CRelation> sptr1 = importRelation(relations[0]);
+    shared_ptr<CRelation> sptr2 = importRelation(relations[1]);
+    
     CRelation res;
-
 
     CUnionCompatible valid;
     valid.isUnionCompatible(relations[0], relations[1]);

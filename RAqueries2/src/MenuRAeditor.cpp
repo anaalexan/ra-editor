@@ -185,21 +185,22 @@ file.exportToFile(sptr);*/
 
 
 vector<CVariable> vec;
-CExpression lodExp("\"lod1.csv\" x \"lod2.csv\"", vec);
+CExpression lodExp("\"lod1.csv\" \"lod2.csv\" x ", vec);
 CVariable lod("LOD", make_shared<CExpression>(lodExp));
 vec.push_back(lod);
-CExpression RezervaceExp("\"rez1.csv\" - \"rez2.csv\"", vec);
+CExpression RezervaceExp("\"rez1.csv\" \"rez2.csv\"  -", vec);
 CVariable rezervace("REZERVACE", make_shared<CExpression>(RezervaceExp));
 vec.push_back(rezervace);
-CExpression zakaznikExp("\"zak1.csv\" & \"zak2.csv\"", vec);
+CExpression zakaznikExp("\"zak1.csv\" \"zak2.csv\"  &", vec);
 CVariable zakaznik("ZAKAZNIK", make_shared<CExpression>(RezervaceExp));
 vec.push_back(zakaznik);
 
 
-string exp = "LOD REZERVACE * ZAKAZNIK * (JMENO_Z='Iásón') [JMENO_L]<JMENO_L;NAZEV_LOD> \"IasonShips.csv\" +";
+string exp = "LOD REZERVACE * ZAKAZNIK * [JMENO_L]<JMENO_L;NAZEV_LOD> \"IasonShips.csv\" +";
 CExpression expression(exp, vec);
+expression.evaluate();
 
-CRelation relation("/home/progtest/Downloads/testInput.csv");
+
 
 
 

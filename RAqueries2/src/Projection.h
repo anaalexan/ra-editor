@@ -9,7 +9,8 @@ class CProjection : public COperator{
         CProjection (const string & columnNames) // Constructor
 		:COperator(EOperatorType::UNARY), m_columnNames(){parse(columnNames);};
 
-        virtual shared_ptr<CRelation> evaluate(vector<shared_ptr<CRelation>> & relations) override;
+        virtual shared_ptr<CRelation> evaluate(const vector<vector<CRow>> & relations) override;
+        virtual shared_ptr<CRelation> evaluate(const vector<string> & paths) override;
     private:
         vector<string> m_columnNames;
 
