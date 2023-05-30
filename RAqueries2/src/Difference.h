@@ -10,6 +10,5 @@ class CDifference : public COperator, public CUnionCompatible{
         CDifference () // Constructor
 		:COperator(EOperatorType::BINARY){};
 
-        virtual shared_ptr<CRelation> evaluate(const vector<vector<CRow>> & relations) override;
-        virtual shared_ptr<CRelation> evaluate(const vector<string> & paths) override;
+        virtual shared_ptr<CRelation> evaluate(vector<shared_ptr<CRelation>> & relations) override;
 };

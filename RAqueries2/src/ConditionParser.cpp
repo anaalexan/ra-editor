@@ -43,6 +43,7 @@ CConditionParser::CCondition CConditionParser::parse(const string & condition){
     }
     while(i < condition.size()){
         word.push_back(condition[i]);
+        i++;
     }
     con.right = word;
     return con;

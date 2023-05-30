@@ -13,6 +13,9 @@
 #include "Rename.h"
 #include "Projection.h"
 #include "NaturalJoin.h"
+#include "Selection.h"
+#include "ThetaJoin.h"
+
 
 
 #include "Expression.h"
@@ -184,7 +187,7 @@ file.exportToFile(sptr);*/
 
 
 
-vector<CVariable> vec;
+/*vector<CVariable> vec;
 CExpression lodExp("\"lod1.csv\" \"lod2.csv\" x ", vec);
 CVariable lod("LOD", make_shared<CExpression>(lodExp));
 vec.push_back(lod);
@@ -198,7 +201,40 @@ vec.push_back(zakaznik);
 
 string exp = "LOD REZERVACE * ZAKAZNIK * [JMENO_L]<JMENO_L;NAZEV_LOD> \"IasonShips.csv\" +";
 CExpression expression(exp, vec);
-expression.evaluate();
+expression.evaluate();*/
+
+
+/*CRelation rel1("/home/progtest/Downloads/bars.csv");
+CFileService file;
+shared_ptr<CRelation> sptr1 = make_shared<CRelation>(rel1);
+file.importFromFile(sptr1);
+
+CProjection vyber("bar");
+vector<shared_ptr<CRelation>> vec = {sptr1};
+CRelation res("/home/progtest/Downloads/res.csv");
+shared_ptr<CRelation> sptr = make_shared<CRelation>(res);
+sptr = vyber.evaluate(vec);
+file.exportToFile(sptr);*/
+
+
+
+CRelation rel1("/home/progtest/Downloads/bars.csv");
+CFileService file;
+shared_ptr<CRelation> sptr1 = make_shared<CRelation>(rel1);
+//file.importFromFile(sptr1);
+
+CProjection projec("bar,beer,price,vat");
+vector<shared_ptr<CRelation>> vec = {sptr1};
+shared_ptr<CRelation> sptr = projec.evaluate(vec);
+
+
+
+CSelection vyber("price >= vat");
+vec = {sptr};
+shared_ptr<CRelation>  sptrNew = vyber.evaluate(vec);
+
+file.exportToFile(sptr);
+
 
 
 

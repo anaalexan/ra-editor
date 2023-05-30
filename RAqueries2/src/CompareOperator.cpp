@@ -3,7 +3,7 @@
 using namespace std;
 
 
-bool CCompareOperator::evaluate(int l, int r, CConditionParser::EOperatorType m_operator){
+bool CCompareOperator::evaluate(CStringConvert::m_variant l, CStringConvert::m_variant r, CConditionParser::EOperatorType m_operator){
         switch(m_operator){
             case(CConditionParser::EOperatorType::eEqual):
                 return (l == r);
@@ -22,7 +22,7 @@ bool CCompareOperator::evaluate(int l, int r, CConditionParser::EOperatorType m_
         }
 }
 
-bool CCompareOperator::evaluate(double l, double r, CConditionParser::EOperatorType m_operator){
+/*bool CCompareOperator::evaluate(double l, double r, CConditionParser::EOperatorType m_operator){
         switch(m_operator){
             case(CConditionParser::EOperatorType::eEqual):
                 return (l == r);
@@ -77,4 +77,4 @@ bool CCompareOperator::evaluate(string l, string r, CConditionParser::EOperatorT
             default:
                 return false;
         }
-}
+}*/

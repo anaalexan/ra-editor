@@ -12,8 +12,11 @@ class CSelection : public COperator{
             m_conditions = CConditionParser().parse(condition);
         };
 
+        ~CSelection() = default;
         virtual shared_ptr<CRelation> evaluate(vector<shared_ptr<CRelation>> & relations) override;
         shared_ptr<CRelation> evaluate(const string & path);
     private:
         CConditionParser::CCondition m_conditions;
+
+        string konstant(string word);
 };

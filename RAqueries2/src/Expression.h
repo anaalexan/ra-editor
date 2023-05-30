@@ -23,4 +23,5 @@ class CExpression{
 		void tokenize(const string & expression, const vector<CVariable> & variables);
 
 		vector<shared_ptr<CToken>> m_tokens;
+		
 };

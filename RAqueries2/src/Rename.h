@@ -10,8 +10,7 @@ class CRename : public COperator{
         CRename (const string & columnNames) // Constructor
 		:COperator(EOperatorType::UNARY), m_oldNewNames(){parse(columnNames);};
 
-        virtual shared_ptr<CRelation> evaluate(const vector<vector<CRow>> & relations) override;
-        virtual shared_ptr<CRelation> evaluate(const vector<string> & paths) override;
+        virtual shared_ptr<CRelation> evaluate(vector<shared_ptr<CRelation>> & relations) override;
     private:
         vector<pair<string,string>> m_oldNewNames;
 

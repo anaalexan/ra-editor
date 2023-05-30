@@ -232,10 +232,14 @@ shared_ptr<CRelation> CExpression::evaluate(){
             if(m_tokens[i]->m_operator->m_type == COperator::EOperatorType::BINARY){
                 relations.push_back(*(stack.end()-2));
                 relations.push_back(*(stack.end()-1));
+                stack.pop_back();
+                stack.pop_back();
+
             }
             if(m_tokens[i]->m_operator->m_type == COperator::EOperatorType::UNARY){
                 
                 relations.push_back(*(stack.end()-1));
+                stack.pop_back();
             }
             
             shared_ptr<CRelation> res;
@@ -245,8 +249,10 @@ shared_ptr<CRelation> CExpression::evaluate(){
     }
     if(m_tokens.size() != 0 || stack.size() != 1){
         cout << "Error. Wrong number of operators or operands." << endl;
+        return nullptr;
     }else{
         return stack[0];
     }
+    
     
 }

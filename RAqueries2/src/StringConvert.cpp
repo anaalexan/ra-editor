@@ -2,14 +2,13 @@
 #include <variant>
 #include "StringConvert.h"
 
-#pragma once
 
 using namespace std;
 
 
 bool CStringConvert::isFloat(string str, float & floatCheck) {
     try {
-        float floatCheck = stof(str);
+        floatCheck = stof(str);
         return true;
     }
     catch (...) {
@@ -19,7 +18,7 @@ bool CStringConvert::isFloat(string str, float & floatCheck) {
 
 bool CStringConvert::isInt(string str, int & intCheck) {
     try {
-        int intCheck = stoi(str);
+        intCheck = stoi(str);
         return true;
     }
     catch (...) {
@@ -28,7 +27,7 @@ bool CStringConvert::isInt(string str, int & intCheck) {
 }
 bool CStringConvert::isDouble(string str,double & doubleCheck) {
     try {
-        double doubleCheck = stod(str);
+        doubleCheck = stod(str);
         return true;
     }
     catch (...) {

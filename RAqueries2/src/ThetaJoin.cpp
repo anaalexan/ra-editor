@@ -63,6 +63,8 @@ shared_ptr<CRelation> CThetaJoin::evaluate(vector<shared_ptr<CRelation>> & relat
                     it->m_values.push_back(sptr2->m_rows[j].m_values[cnt]);
                }
           }
+        }
      }
      return make_shared<CRelation>(res);  
+     
 }

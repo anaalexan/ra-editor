@@ -10,7 +10,7 @@ using namespace std;
 
 string CSelection::konstant(string word){
     string newWord;
-    for(size_t i = i; i < word.size()-1; i++){
+    for(size_t i = 1; i < word.size()-1; i++){
         newWord.push_back(word[i]);
     }
     return newWord;
@@ -48,6 +48,24 @@ shared_ptr<CRelation> CSelection::evaluate(const string & path){
             return nullptr;
         }
     }
+    string konst;
+    size_t indexR;
+    if(m_conditions.right[0] == '\''){
+        konst = konstant(m_conditions.right);  
+    }else{  
+        for(size_t j = 0; j < res.m_rows[0].m_values.size(); j++){
+            if(m_conditions.right == res.m_rows[0].m_values[j]){
+                isHere = true;
+                indexR = j;
+                break;
+            }
+            if(isHere == false && j == res.m_rows[0].m_values.size()-1){
+                cout << "Name of the atribute: " <<  "\"" << m_conditions.right << "\" has not been found in the relation" << endl;
+                return nullptr;
+            }
+        }
+    }
+
     while(getline(fin, line)){
         CRow row;
         stringstream ss(line);
@@ -55,31 +73,20 @@ shared_ptr<CRelation> CSelection::evaluate(const string & path){
             //save name of atributes to project into final relation
             row.m_values.push_back(word);
         }
-        string konst;
         CCompareOperator compare;
         CStringConvert convert;
         if(m_conditions.right[0] == '\''){
-            konst = konstant(m_conditions.right);
-            if(compare.evaluate(convert.whatType(konst), convert.whatType(row.m_values[indexL]), m_conditions.m_operator)){
+            CStringConvert::m_variant left_con = convert.whatType(row.m_values[indexL]);
+            CStringConvert::m_variant right_con = convert.whatType(konst);
+            if(compare.evaluate(left_con, right_con, m_conditions.m_operator)){
                 res.m_rows.push_back(row);
             }
             
         }else{
-            size_t indexR;
-            for(size_t j = 0; j < res.m_rows[0].m_values.size(); j++){
-                if(m_conditions.right == res.m_rows[0].m_values[j]){
-                    isHere = true;
-                    indexR = j;
-                    break;
-                }
-                if(isHere == false && j == res.m_rows[0].m_values.size()-1){
-                    cout << "Name of the atribute: " <<  "\"" << m_conditions.right << "\" has not been found in the relation" << endl;
-                    return nullptr;
-                }
-            }
-            
-            
-            if(compare.evaluate(convert.whatType(row.m_values[indexL]), convert.whatType(row.m_values[indexR]), m_conditions.m_operator)){
+            //check if current line meet condition
+            CStringConvert::m_variant left_con = convert.whatType(row.m_values[indexL]);
+            CStringConvert::m_variant right_con = convert.whatType(row.m_values[indexR]);
+            if(compare.evaluate(left_con, right_con, m_conditions.m_operator)){
                 res.m_rows.push_back(row);
             }
             
@@ -103,13 +110,15 @@ shared_ptr<CRelation> CSelection::evaluate(vector<shared_ptr<CRelation>> & relat
         bool isHere = false;
         size_t indexL;
         //check if relation contains the atribute from condition
-        for(size_t j = 0; j < relations[0]->m_rows[0].m_values.size(); j++){
-            if(m_conditions.left == res.m_rows[0].m_values[j]){
+        size_t rowSize = relations[0]->m_rows[0].m_values.size();
+        for(size_t j = 0; j < rowSize; j++){
+            string word = relations[0]->m_rows[0].m_values[j];
+            if(m_conditions.left == word){
                 isHere = true;
                 indexL = j;
                 break;
             }
-            if(isHere == false && j == relations[0]->m_rows[0].m_values.size()-1){
+            if(isHere == false && (j == rowSize -1)){
                 cout << "Name of the atribute: " <<  "\"" << m_conditions.left << "\" has not been found in the relation" << endl;
                 return nullptr;
             }
@@ -122,9 +131,11 @@ shared_ptr<CRelation> CSelection::evaluate(vector<shared_ptr<CRelation>> & relat
         CStringConvert convert;
         if(m_conditions.right[0] == '\''){
             konst = konstant(m_conditions.right);
-            for(size_t j = 0; j < res.m_rows.size(); j++){
-                if(compare.evaluate(convert.whatType(konst), convert.whatType(res.m_rows[j].m_values[indexL]), m_conditions.m_operator)){
-                    res.m_rows.push_back(res.m_rows[j]);
+            for(size_t j = 1; j < relations[0]->m_rows.size(); j++){
+                CStringConvert::m_variant left_con = convert.whatType(relations[0]->m_rows[j].m_values[indexL]);
+                CStringConvert::m_variant right_con = convert.whatType(konst);
+                if(compare.evaluate(left_con, right_con, m_conditions.m_operator)){
+                    res.m_rows.push_back(relations[0]->m_rows[j]);
                 }
             }
         }else{
@@ -141,8 +152,11 @@ shared_ptr<CRelation> CSelection::evaluate(vector<shared_ptr<CRelation>> & relat
                     return nullptr;
                 }
             }
-            for(size_t j = 0; j < relations[0]->m_rows.size(); j++){
-                if(compare.evaluate(convert.whatType(m_conditions.right), convert.whatType(relations[0]->m_rows[j].m_values[indexR]), m_conditions.m_operator)){
+            for(size_t j = 1; j < relations[0]->m_rows.size(); j++){
+                CStringConvert::m_variant left_con = convert.whatType(relations[0]->m_rows[j].m_values[indexL]);
+                CStringConvert::m_variant right_con = convert.whatType(relations[0]->m_rows[j].m_values[indexR]);
+
+                if(compare.evaluate(left_con, right_con, m_conditions.m_operator)){
                     res.m_rows.push_back(relations[0]->m_rows[j]);
                 }
             }
