@@ -142,10 +142,15 @@ void CExpression::tokenize(const string & expression, const vector<CVariable> & 
             }
             case(EKeyRA::ThetaJoin):
             {
-                i++;
+                i++;  //skip simbol ^
+
+                //skiping all spaces
                 while(expression[i] == ' '){
                     i++;
                 }
+
+                //skip "("
+                i++;
                 string condition;
                 int cnt = 0;
                 while(expression[i] != ')' && cnt == 0){

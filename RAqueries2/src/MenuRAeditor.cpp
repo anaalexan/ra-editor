@@ -245,12 +245,12 @@ vector<CVariable> vec;
 /*CExpression kartExp("\"/home/progtest/Downloads/kart1.csv\" \"/home/progtest/Downloads/kart2.csv\" & ", vec);
 CVariable kart("KART", make_shared<CExpression>(kartExp));
 vec.push_back(kart);/*/
-CExpression expression("\"/home/progtest/Downloads/sel1.csv\" <AMOUNT,castka;BRANCH_NAME,name> ", vec);
+CExpression expression("\"/home/progtest/Downloads/theta1.csv\" \"/home/progtest/Downloads/theta2.csv\" * ", vec);
 shared_ptr<CRelation>  sptrNew = expression.evaluate();
 
 
 CFileService file;
-sptrNew->setPath("/home/progtest/Downloads/resRen.csv");
+sptrNew->setPath("/home/progtest/Downloads/resNatural.csv");
 file.exportToFile(sptrNew);
 
 

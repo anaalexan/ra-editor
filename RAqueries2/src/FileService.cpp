@@ -15,13 +15,11 @@ bool CFileService::exportToFile(shared_ptr<CRelation> data) {
         for(size_t j = 0; j < data->m_rows.begin()->m_values.size(); j++){
             if(j != 0){
                 fout << ",";
-                cout << ",";
             }
             fout << data->m_rows[i].m_values[j];
             cout << data->m_rows[i].m_values[j];
             if(j == data->m_rows.begin()->m_values.size() - 1){
                 fout << "\n";
-                cout << "\n";
             }
         }
 
@@ -50,12 +48,12 @@ bool CFileService::importFromFile(const shared_ptr<CRelation> data){
         data->m_rows.push_back(row);
     }
 
-    for (const auto & element : data->m_rows){
+    /*for (const auto & element : data->m_rows){
         
         for (const auto & element2 : element.m_values){
             cout << element2 << endl;
         }
-    }
+    }*/
 
     fin.close();
     return true;
