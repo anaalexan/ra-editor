@@ -17,11 +17,13 @@ class CExpression{
 		CExpression (const string & expression, const vector<CVariable> & variables)
 		:m_tokens(){tokenize(expression, variables);};
 
-	    shared_ptr<CRelation> evaluate();	
+	    shared_ptr<CRelation> evaluate();
+
+		vector<shared_ptr<CToken>> m_tokens;	
 	private:
 		EKeyRA charToEnum(char c);
 		void tokenize(const string & expression, const vector<CVariable> & variables);
 
-		vector<shared_ptr<CToken>> m_tokens;
+		
 		
 };

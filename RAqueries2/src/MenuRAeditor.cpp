@@ -217,7 +217,8 @@ sptr = vyber.evaluate(vec);
 file.exportToFile(sptr);*/
 
 
-
+///////////////////////////////
+/*
 CRelation rel1("/home/progtest/Downloads/bars.csv");
 shared_ptr<CRelation> sptr1 = make_shared<CRelation>(rel1);
 //file.importFromFile(sptr1);
@@ -236,10 +237,38 @@ vec = {sptr, sptr2};
 shared_ptr<CRelation>  sptrNew = spoj.evaluate(vec);
 
 CFileService file;
-sptrNew->setPath("/home/progtest/Downloads/res.csv");
+sptrNew->setPath("/home/progtest/Downloads/res1.csv");
 
+file.exportToFile(sptrNew);*/
+
+vector<CVariable> vec;
+/*CExpression kartExp("\"/home/progtest/Downloads/kart1.csv\" \"/home/progtest/Downloads/kart2.csv\" x ", vec);
+CVariable kart("KART", make_shared<CExpression>(kartExp));
+vec.push_back(kart);/*/
+CExpression expression("\"/home/progtest/Downloads/kart1.csv\" \"/home/progtest/Downloads/kart2.csv\" x ", vec);
+shared_ptr<CRelation>  sptrNew = expression.evaluate();
+
+
+CFileService file;
+sptrNew->setPath("/home/progtest/Downloads/resKart.csv");
 file.exportToFile(sptrNew);
 
+
+
+/*
+
+CExpression RezervaceExp("\"rez1.csv\" \"rez2.csv\"  -", vec);
+CVariable rezervace("REZERVACE", make_shared<CExpression>(RezervaceExp));
+vec.push_back(rezervace);
+CExpression zakaznikExp("\"zak1.csv\" \"zak2.csv\"  &", vec);
+CVariable zakaznik("ZAKAZNIK", make_shared<CExpression>(RezervaceExp));
+vec.push_back(zakaznik);
+
+
+string exp = "LOD REZERVACE * ZAKAZNIK * [JMENO_L]<JMENO_L;NAZEV_LOD> \"IasonShips.csv\" +";
+CExpression expression(exp, vec);
+expression.evaluate();
+*/
 
 
 

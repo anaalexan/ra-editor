@@ -245,6 +245,19 @@ shared_ptr<CRelation> CExpression::evaluate(){
             shared_ptr<CRelation> res;
             res = m_tokens[i]->m_operator->evaluate(relations);
             stack.push_back(res);
+
+            //delete evalueted operator and operand/s
+            if(m_tokens[i]->m_operator->m_type == COperator::EOperatorType::BINARY){
+                m_tokens.pop_back();
+                m_tokens.pop_back();
+                m_tokens.pop_back();
+            }
+            if(m_tokens[i]->m_operator->m_type == COperator::EOperatorType::UNARY){
+                m_tokens.pop_back();
+                m_tokens.pop_back();
+            }
+
+
         }
     }
     if(m_tokens.size() != 0 || stack.size() != 1){
