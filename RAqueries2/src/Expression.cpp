@@ -95,11 +95,10 @@ void CExpression::tokenize(const string & expression, const vector<CVariable> & 
             {
                 i++;
                 string columnNames;
-                while(expression[i+1] != ']'){
+                while(expression[i] != ']'){
                     columnNames.push_back(expression[i]);
                     i++;
                 }
-                i++;
                 CProjection op(columnNames);
                 CToken tok (CToken::ETokenType::OPERATOR, make_shared<CProjection>(op)) ;
                 m_tokens.push_back(make_shared<CToken>(tok));
@@ -109,11 +108,10 @@ void CExpression::tokenize(const string & expression, const vector<CVariable> & 
             {
                 i++;
                 string columnNames;
-                while(expression[i+1] != '>'){
+                while(expression[i] != '>'){
                     columnNames.push_back(expression[i]);
                     i++;
                 }
-                i++;
                 CRename op(columnNames);
                 CToken tok (CToken::ETokenType::OPERATOR, make_shared<CRename>(op)) ;
                 m_tokens.push_back(make_shared<CToken>(tok));
@@ -124,7 +122,8 @@ void CExpression::tokenize(const string & expression, const vector<CVariable> & 
                 i++;
                 string condition;
                 int cnt = 0;
-                while(expression[i+1] != ')' && cnt == 0){
+                while(expression[i] != ')' && cnt == 0){
+                    
                     if(expression[i+1] == '('){
                         cnt++;
                     }
@@ -133,8 +132,8 @@ void CExpression::tokenize(const string & expression, const vector<CVariable> & 
                     }
                     condition.push_back(expression[i]);
                     i++;
+                    
                 }
-                i++;
                 CSelection op(condition);
                 CToken tok (CToken::ETokenType::OPERATOR, make_shared<CSelection>(op)) ;
                 m_tokens.push_back(make_shared<CToken>(tok));
@@ -149,7 +148,7 @@ void CExpression::tokenize(const string & expression, const vector<CVariable> & 
                 }
                 string condition;
                 int cnt = 0;
-                while(expression[i+1] != ')' && cnt == 0){
+                while(expression[i] != ')' && cnt == 0){
                     if(expression[i+1] == '('){
                         cnt++;
                     }
@@ -159,7 +158,6 @@ void CExpression::tokenize(const string & expression, const vector<CVariable> & 
                     condition.push_back(expression[i]);
                     i++;
                 }
-                i++;
                 CThetaJoin op(condition);
                 CToken tok (CToken::ETokenType::OPERATOR, make_shared<CThetaJoin>(op)) ;
                 m_tokens.push_back(make_shared<CToken>(tok));
