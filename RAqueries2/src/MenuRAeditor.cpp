@@ -219,21 +219,26 @@ file.exportToFile(sptr);*/
 
 
 CRelation rel1("/home/progtest/Downloads/bars.csv");
-CFileService file;
 shared_ptr<CRelation> sptr1 = make_shared<CRelation>(rel1);
 //file.importFromFile(sptr1);
 
-CProjection projec("bar,beer,price,vat");
+CRelation rel2("/home/progtest/Downloads/barsAdres.csv");
+shared_ptr<CRelation> sptr2 = make_shared<CRelation>(rel2);
+
+CProjection projec("bar,beer,price");
 vector<shared_ptr<CRelation>> vec = {sptr1};
 shared_ptr<CRelation> sptr = projec.evaluate(vec);
 
 
 
-CSelection vyber("price >= vat");
-vec = {sptr};
-shared_ptr<CRelation>  sptrNew = vyber.evaluate(vec);
+CThetaJoin spoj("bar == name");
+vec = {sptr, sptr2};
+shared_ptr<CRelation>  sptrNew = spoj.evaluate(vec);
 
-file.exportToFile(sptr);
+CFileService file;
+sptrNew->setPath("/home/progtest/Downloads/res.csv");
+
+file.exportToFile(sptrNew);
 
 
 

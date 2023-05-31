@@ -39,7 +39,7 @@ shared_ptr<CRelation> CThetaJoin::evaluate(vector<shared_ptr<CRelation>> & relat
      size_t indexR;
      //checking if second relation contains the atribute from condition
      for(size_t j = 0; j < sptr2->m_rows[0].m_values.size(); j++){
-          if(m_conditions.right == res.m_rows[0].m_values[j]){
+          if(m_conditions.right == sptr2->m_rows[0].m_values[j]){
                isHereR = true;
                indexR = j;
                break;
