@@ -69,7 +69,7 @@ EKeywords CMenuRAeditor::stringToEnum(const string & word){
     if(word == "TRANSLATE"){
         return EKeywords::eTRANSLATE;
     }
-    return EKeywords::eTRANSLATE;
+    return EKeywords::eNoMatch;
 }
 
 string toUpperCase(string input){
@@ -78,6 +78,16 @@ string toUpperCase(string input){
     }
     return input;
 }
+
+
+/*
+import kart1 "/home/progtest/Downloads/kart1.csv"
+import kart2 "/home/progtest/Downloads/kart2.csv"
+end
+res = kart1 kart2 x
+print res
+
+*/
 
 int CMenuRAeditor::execute(){
     printText();
@@ -119,8 +129,22 @@ int CMenuRAeditor::execute(){
             }
             case(EKeywords::eEXPORT):{
                 string exp,path;
-                getline(ss, exp, '>');
-                getline(ss, path, '>');
+                size_t i = key.size()+1;
+                int cnt = 0;
+                while(line[i] != '>' && cnt == 0){
+                    if(line[i] == '<'){
+                        cnt++;
+                    }
+                    if(line[i] == '>'){
+                        cnt--;
+                    }
+                    exp.push_back(line[i]);
+                    i++;
+                }
+                while(line[i] != '\n'){
+                    path.push_back(line[i]);
+                    i++;
+                }
                 CExpression expression(exp, m_variables);
                 shared_ptr<CRelation>  sptr = expression.evaluate();
 
@@ -134,11 +158,44 @@ int CMenuRAeditor::execute(){
                 break;
             }
             default:{
+                if(line.size() == 0){
+                    break;
+                }
                 string exp;
-                getline(ss, exp, '=');
+                size_t i = 0;
+                string name;
+                
+                //string into two parts separated by '='
+                while (line[i] != '=') {
+                    i++;
+                }
+                //first part befor '=' its the name of variable
+                bool space = false;
+                for(size_t j = 0; j < i; j++){
+                    while (line[j] == ' '){
+                        if(j == i-1){
+                            space = true;
+                            break;
+                        }
+                        j++;
+                    }
+                    if(space == true){
+                        break;
+                    }
+                    name.push_back(line[j]);
+                }
+                //skip simbol '='
+                i++;
+                //second part after '=' its expression for the variable
+                while (i < line.size())
+                {
+                    exp.push_back(line[i]);
+                    i++;
+                }
+                //in case exp is empty, that means there was no '=' symbol, so invalid command
                 if(exp.size() != 0){
                     CExpression expression(exp, m_variables);
-                    CVariable var(key, make_shared<CExpression>(expression));
+                    CVariable var(name, make_shared<CExpression>(expression));
                     m_variables.push_back(var);
                 }else{
                     cout << "Invalid command." << endl;
@@ -146,20 +203,15 @@ int CMenuRAeditor::execute(){
 
             }
 
-            
-
         }
             
     }
-        
-
-    //swtich case
 
     
-        int choice = 0;
-        cin >> choice;
+        /*int choice = 0;
+        cin >> choice;*/
 
-        return choice;
+        return 1;
 }
 
 CMenuBase * CMenuRAeditor::getNextMenu(int choice, bool & isExitSelected){
@@ -294,10 +346,10 @@ sptrNew->setPath("/home/progtest/Downloads/res1.csv");
 
 file.exportToFile(sptrNew);*/
 
-vector<CVariable> vec;
-/*CExpression kartExp("\"/home/progtest/Downloads/kart1.csv\" \"/home/progtest/Downloads/kart2.csv\" & ", vec);
+/*vector<CVariable> vec;
+CExpression kartExp("\"/home/progtest/Downloads/kart1.csv\" \ & ", vec);
 CVariable kart("KART", make_shared<CExpression>(kartExp));
-vec.push_back(kart);/*/
+vec.push_back(kart);/
 CExpression expression("\"/home/progtest/Downloads/theta1.csv\" \"/home/progtest/Downloads/theta2.csv\" * ", vec);
 shared_ptr<CRelation>  sptrNew = expression.evaluate();
 
@@ -305,6 +357,9 @@ shared_ptr<CRelation>  sptrNew = expression.evaluate();
 CFileService file;
 sptrNew->setPath("/home/progtest/Downloads/resNatural.csv");
 file.exportToFile(sptrNew);
+*/
+
+
 
 
 
@@ -324,7 +379,14 @@ expression.evaluate();
 */
 
 
+/*
+import kart1 "/home/progtest/Downloads/kart1.csv"
+import kart2 "/home/progtest/Downloads/kart2.csv"
+end
+res = kart1 kart2 x
+print res
 
+*/
 
 
 //end of test

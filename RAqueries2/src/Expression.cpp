@@ -95,9 +95,13 @@ void CExpression::tokenize(const string & expression, const vector<CVariable> & 
             {
                 i++;
                 string columnNames;
-                while(expression[i] != ']'){
+                while(expression[i] != ']' && i < expression.size()){
                     columnNames.push_back(expression[i]);
                     i++;
+                }
+                if(expression[i] != ']'){
+                    cout << "Error. Missing closing brasket ']'." << endl;
+                    break;
                 }
                 CProjection op(columnNames);
                 CToken tok (CToken::ETokenType::OPERATOR, make_shared<CProjection>(op)) ;
@@ -108,9 +112,13 @@ void CExpression::tokenize(const string & expression, const vector<CVariable> & 
             {
                 i++;
                 string columnNames;
-                while(expression[i] != '>'){
+                while(expression[i] != '>' && i < expression.size()){
                     columnNames.push_back(expression[i]);
                     i++;
+                }
+                if(expression[i] != ']'){
+                    cout << "Error. Missing closing brasket '>'." << endl;
+                    break;
                 }
                 CRename op(columnNames);
                 CToken tok (CToken::ETokenType::OPERATOR, make_shared<CRename>(op)) ;
@@ -122,7 +130,7 @@ void CExpression::tokenize(const string & expression, const vector<CVariable> & 
                 i++;
                 string condition;
                 int cnt = 0;
-                while(expression[i] != ')' && cnt == 0){
+                while((expression[i] != ')' && cnt == 0) && i < expression.size()){
                     
                     if(expression[i+1] == '('){
                         cnt++;
@@ -133,6 +141,10 @@ void CExpression::tokenize(const string & expression, const vector<CVariable> & 
                     condition.push_back(expression[i]);
                     i++;
                     
+                }
+                if(expression[i] != ')' && cnt == 0){
+                    cout << "Error. Missing closing brasket ')'." << endl;
+                    break;
                 }
                 CSelection op(condition);
                 CToken tok (CToken::ETokenType::OPERATOR, make_shared<CSelection>(op)) ;
@@ -153,7 +165,7 @@ void CExpression::tokenize(const string & expression, const vector<CVariable> & 
                 i++;
                 string condition;
                 int cnt = 0;
-                while(expression[i] != ')' && cnt == 0){
+                while((expression[i] != ')' && cnt == 0) && i < expression.size()){
                     if(expression[i+1] == '('){
                         cnt++;
                     }
@@ -162,6 +174,10 @@ void CExpression::tokenize(const string & expression, const vector<CVariable> & 
                     }
                     condition.push_back(expression[i]);
                     i++;
+                }
+                if(expression[i] != ')' && cnt == 0){
+                    cout << "Error. Missing closing brasket ')'." << endl;
+                    break;
                 }
                 CThetaJoin op(condition);
                 CToken tok (CToken::ETokenType::OPERATOR, make_shared<CThetaJoin>(op)) ;
@@ -179,9 +195,13 @@ void CExpression::tokenize(const string & expression, const vector<CVariable> & 
             {
                 string path;
                 i++;
-                while(expression[i] != '"'){
+                while(expression[i] != '"' && i < expression.size()){
                     path.push_back(expression[i]);
                     i++;
+                }
+                if(expression[i] != '"'){
+                    cout << "Error. Missing closing quotation mark '\"'." << endl;
+                    break;
                 }
                 CRelation rel(path);
                 CToken tok (CToken::ETokenType::RELATION, make_shared<CRelation>(rel)) ;
@@ -195,8 +215,11 @@ void CExpression::tokenize(const string & expression, const vector<CVariable> & 
             
             default:
             {
+                while(expression[i] == ' '){
+                    i++;
+                }   
                 string word;
-                while(expression[i+1] != ' ' && expression[i+1] != '(' && expression[i+1] != '[' && expression[i+1] != '<' && expression[i+1] != '*'
+                while(i < expression.size() &&  expression[i+1] != ' ' && expression[i+1] != '(' && expression[i+1] != '[' && expression[i+1] != '<' && expression[i+1] != '*'
                 && expression[i+1] != '^' && expression[i+1] != '&' && expression[i+1] != '+' && expression[i+1] != '-' && expression[i+1] != 'x'){
                     word.push_back(expression[i]);
                     i++;
@@ -205,6 +228,7 @@ void CExpression::tokenize(const string & expression, const vector<CVariable> & 
                 i++;
                 bool isHere = false;
                 for(size_t j = 0; j < variables.size(); j++){
+                    string varName = variables[j].m_name;
                     if(variables[j].m_name == word){
                         isHere = true;
                         for(size_t t = 0; t < variables[j].m_expression->m_tokens.size(); t++){
@@ -220,7 +244,6 @@ void CExpression::tokenize(const string & expression, const vector<CVariable> & 
             }
         }
     }
-    cout << "end" << endl;
 }
 
 
