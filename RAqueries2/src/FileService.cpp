@@ -17,7 +17,6 @@ bool CFileService::exportToFile(shared_ptr<CRelation> data) {
                 fout << ",";
             }
             fout << data->m_rows[i].m_values[j];
-            cout << data->m_rows[i].m_values[j];
             if(j == data->m_rows.begin()->m_values.size() - 1){
                 fout << "\n";
             }

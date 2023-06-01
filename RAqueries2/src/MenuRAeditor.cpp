@@ -28,6 +28,31 @@ CMenuRAeditor::CMenuRAeditor(){
             "For return to main menu write EXIT.\n");
 }
 
+void CMenuRAeditor::printResult(shared_ptr<CRelation> data) {
+    for(size_t i = 0; i < data->m_rows.size(); i++)
+        for(size_t j = 0; j < data->m_rows.begin()->m_values.size(); j++){
+            if(j != 0){
+                cout << ",";
+            }
+            cout << data->m_rows[i].m_values[j];
+            cout << data->m_rows[i].m_values[j];
+            if(j == data->m_rows.begin()->m_values.size() - 1){
+                cout << "\n";
+            }
+        }
+}
+
+string CMenuRAeditor::noQuots(string word){
+    string newWord;
+    for(size_t i = 0; i < word.size(); i++){
+        while (word[i] == ' ' || word[i] == '\"' ){
+            i++;
+        }
+        newWord.push_back(word[i]);
+    }
+    return newWord;
+}
+
 EKeywords CMenuRAeditor::stringToEnum(const string & word){
     if(word == "EXIT"){
         return EKeywords::eEXIT;
@@ -59,7 +84,9 @@ int CMenuRAeditor::execute(){
     
     bool exit = false;
 
-    /*while(exit != true){
+    
+
+    while(exit != true){
 
         string line;
         getline(cin, line);
@@ -73,23 +100,49 @@ int CMenuRAeditor::execute(){
                 break;
             }
             case(EKeywords::eIMPORT):{
-                string word,path;
+                string word, path;
                 getline(ss, word, ' ');
                 getline(ss, path, ' ');
-                CVariable var(word, path);
-
+                CExpression expresion(path, m_variables);
+                CVariable var(word, make_shared<CExpression>(expresion));
+                m_variables.push_back(var);
                 break;
             }
             case(EKeywords::ePRINT):{
+                string exp;
+                getline(ss, exp, '\n');
+                CExpression expression(exp, m_variables);
+                shared_ptr<CRelation>  sptr = expression.evaluate();
+                printResult(sptr);
+
                 break;
             }
             case(EKeywords::eEXPORT):{
+                string exp,path;
+                getline(ss, exp, '>');
+                getline(ss, path, '>');
+                CExpression expression(exp, m_variables);
+                shared_ptr<CRelation>  sptr = expression.evaluate();
+
+                CFileService file;
+                sptr->setPath(noQuots(path));
+                file.exportToFile(sptr);
+
                 break;
             }
             case(EKeywords::eTRANSLATE):{
                 break;
             }
             default:{
+                string exp;
+                getline(ss, exp, '=');
+                if(exp.size() != 0){
+                    CExpression expression(exp, m_variables);
+                    CVariable var(key, make_shared<CExpression>(expression));
+                    m_variables.push_back(var);
+                }else{
+                    cout << "Invalid command." << endl;
+                }
 
             }
 
@@ -97,7 +150,7 @@ int CMenuRAeditor::execute(){
 
         }
             
-    }*/
+    }
         
 
     //swtich case

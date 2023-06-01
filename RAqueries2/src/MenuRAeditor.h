@@ -18,8 +18,13 @@ class CMenuRAeditor : public CMenuBase{
         CMenuRAeditor();
         virtual CMenuBase *getNextMenu(int choice, bool& isExitSelected);
         virtual int execute();
+
+        void printResult(shared_ptr<CRelation> data);
     private:
         vector<CVariable> m_variables;
         EKeywords stringToEnum(const string & word);
 
+        string noQuots(string word);
+
 };
+
