@@ -83,7 +83,6 @@ string toUpperCase(string input){
 /*
 import kart1 "/home/progtest/Downloads/kart1.csv"
 import kart2 "/home/progtest/Downloads/kart2.csv"
-end
 res = kart1 kart2 x
 print res
 

@@ -229,7 +229,10 @@ void CExpression::tokenize(const string & expression, const vector<CVariable> & 
                 bool isHere = false;
                 for(size_t j = 0; j < variables.size(); j++){
                     string varName = variables[j].m_name;
-                    if(variables[j].m_name == word){
+                    cout << varName << endl;
+                    cout << word << endl;
+                    cout << varName << "==" << word << endl;
+                    if(varName == word){
                         isHere = true;
                         for(size_t t = 0; t < variables[j].m_expression->m_tokens.size(); t++){
                             m_tokens.push_back(variables[j].m_expression->m_tokens[t]);
