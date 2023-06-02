@@ -35,7 +35,6 @@ void CMenuRAeditor::printResult(shared_ptr<CRelation> data) {
                 cout << ",";
             }
             cout << data->m_rows[i].m_values[j];
-            cout << data->m_rows[i].m_values[j];
             if(j == data->m_rows.begin()->m_values.size() - 1){
                 cout << "\n";
             }
@@ -84,7 +83,10 @@ string toUpperCase(string input){
 import kart1 "/home/progtest/Downloads/kart1.csv"
 import kart2 "/home/progtest/Downloads/kart2.csv"
 res = kart1 kart2 x
+export res > /home/progtest/Downloads/resKartnew.csv
 print res
+
+
 
 */
 
@@ -130,7 +132,11 @@ int CMenuRAeditor::execute(){
                 string exp,path;
                 size_t i = key.size()+1;
                 int cnt = 0;
-                while(line[i] != '>' && cnt == 0){
+                while(line[i] != '>' && cnt == 0 && i < line.size()){
+                    if(line[i] == ' ' ){
+                        i++;
+                        continue;
+                    }
                     if(line[i] == '<'){
                         cnt++;
                     }
@@ -140,7 +146,17 @@ int CMenuRAeditor::execute(){
                     exp.push_back(line[i]);
                     i++;
                 }
-                while(line[i] != '\n'){
+                if(line[i] != '>'){
+                    cout << "Error. There is no path to export." << endl;
+                }
+                //skiping simbol "<"
+                i++;
+                
+                while(line[i] == ' ' && i < line.size()){
+                    i++;
+                }
+
+                while(i < line.size()){
                     path.push_back(line[i]);
                     i++;
                 }

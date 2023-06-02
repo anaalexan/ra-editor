@@ -1,4 +1,3 @@
-
 #include <sstream>
 #include <cstdio> 
 #include <iostream>
@@ -19,7 +18,25 @@
 #include "Union.h"
 
 
+
+
 using namespace std;
+
+
+vector<string> CExpression::findRelevantAtribute(){
+    vector<string> vec;
+    for(size_t i = 0; i < m_tokens.size(); i++){
+        if(m_tokens[i]->m_type ==  CToken::ETokenType::OPERATOR){
+            vector<string> atributes = m_tokens[i]->m_operator->relevantAtribute();
+            if(atributes.size() != 0){
+                for(size_t j = 0; j < atributes.size(); j++){
+                    vec.push_back(atributes[j]);
+                }
+            }
+        }
+    }
+    return vec;
+}
 
 EKeyRA CExpression::charToEnum(char c){
     if(c == 'x'){
@@ -215,11 +232,9 @@ void CExpression::tokenize(const string & expression, const vector<CVariable> & 
             
             default:
             {
-                while(expression[i] == ' '){
-                    i++;
-                }   
                 string word;
-                while(i < expression.size() &&  expression[i+1] != ' ' && expression[i+1] != '(' && expression[i+1] != '[' && expression[i+1] != '<' && expression[i+1] != '*'
+
+                while(i < expression.size()-1 &&  expression[i+1] != ' ' && expression[i+1] != '(' && expression[i+1] != '[' && expression[i+1] != '<' && expression[i+1] != '*'
                 && expression[i+1] != '^' && expression[i+1] != '&' && expression[i+1] != '+' && expression[i+1] != '-' && expression[i+1] != 'x'){
                     word.push_back(expression[i]);
                     i++;
@@ -229,9 +244,6 @@ void CExpression::tokenize(const string & expression, const vector<CVariable> & 
                 bool isHere = false;
                 for(size_t j = 0; j < variables.size(); j++){
                     string varName = variables[j].m_name;
-                    cout << varName << endl;
-                    cout << word << endl;
-                    cout << varName << "==" << word << endl;
                     if(varName == word){
                         isHere = true;
                         for(size_t t = 0; t < variables[j].m_expression->m_tokens.size(); t++){

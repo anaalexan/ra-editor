@@ -15,6 +15,8 @@ class CStringConvert{
 
         m_variant whatType(string str);
 
+        //void remove_invisible (string & str);
+
         
 
 };
