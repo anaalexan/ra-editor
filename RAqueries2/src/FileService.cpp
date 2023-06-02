@@ -33,8 +33,8 @@ CRow CFileService::importAtriburesFromFile(const shared_ptr<CRelation> data){
     CRow row;
 
     if(!fin.is_open()){
-        cout << "Could not open file" << endl;
-        return row;
+        string error = "Error. Cannot open file: " + data->getPath();
+        throw  error;
     }
     
     getline(fin, line);
@@ -53,8 +53,8 @@ bool CFileService::importFromFile(const shared_ptr<CRelation> data){
     string line, word;
 
     if(!fin.is_open()){
-        cout << "Could not open file" << endl;
-        return false;
+        string error = "Error. Cannot open file: " + data->getPath();
+        throw  error;
     }
     
     while(getline(fin, line)){

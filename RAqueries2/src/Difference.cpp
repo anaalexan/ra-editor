@@ -14,12 +14,8 @@ shared_ptr<CRelation> CDifference::evaluateAtributes(vector<shared_ptr<CRelation
     row2 = importAtributes(relations[1]);
 
     CUnionCompatible valid;
-    try{
-        if(!valid.isUnionCompatible(row1, row2)){
-            throw 505;
-        }
-    }catch (...) {
-            cout << "Relations are not union compatible. Both relations should have the exact same attributes." << endl;
+    if(!valid.isUnionCompatible(row1, row2)){
+        throw "Error. Cannot evaluate Difference. Relations are not union compatible. Both relations should have the exact same attributes.";
     }
     CRelation res;
     res.m_rows.push_back(row1);
@@ -35,12 +31,8 @@ shared_ptr<CRelation> CDifference::evaluate(vector<shared_ptr<CRelation>> & rela
     CRelation res;
 
     CUnionCompatible valid;
-    try{
-        if(!valid.isUnionCompatible(sptr1->m_rows[0], sptr2->m_rows[0])){
-            throw 505;
-        }
-    }catch (...) {
-            cout << "Relations are not union compatible. Both relations should have the exact same attributes." << endl;
+    if(!valid.isUnionCompatible(sptr1->m_rows[0], sptr2->m_rows[0])){
+        throw "Error. Cannot evaluate Difference. Relations are not union compatible. Both relations should have the exact same attributes.";
     }
 
     

@@ -42,8 +42,8 @@ shared_ptr<CRelation> CSelection::evaluate(const string & path){
     CRelation res;
 
     if(!fin.is_open()){
-        cout << "Could not open file" << endl;
-        return nullptr;
+        string sError = "Error. Cannot open file: " + path;
+        throw  sError;
     }
     
     getline(fin, line);
@@ -64,8 +64,8 @@ shared_ptr<CRelation> CSelection::evaluate(const string & path){
             break;
         }
         if(isHere == false && j == res.m_rows[0].m_values.size()-1){
-            cout << "Name of the atribute: " <<  "\"" << m_conditions.left << "\" has not been found in the relation" << endl;
-            return nullptr;
+            string sError = "Error. Cannot evaluate Selection. Name of the atribute: " + m_conditions.left + " has not been found in the relation";
+            throw  sError;
         }
     }
     string konst;
@@ -79,9 +79,11 @@ shared_ptr<CRelation> CSelection::evaluate(const string & path){
                 indexR = j;
                 break;
             }
+
             if(isHere == false && j == res.m_rows[0].m_values.size()-1){
-                cout << "Name of the atribute: " <<  "\"" << m_conditions.right << "\" has not been found in the relation" << endl;
-                return nullptr;
+
+                string sError = "Error. Cannot evaluate Selection. Name of the atribute: " + m_conditions.right + " has not been found in the relation";
+                throw  sError;
             }
         }
     }
@@ -139,8 +141,8 @@ shared_ptr<CRelation> CSelection::evaluate(vector<shared_ptr<CRelation>> & relat
                 break;
             }
             if(isHere == false && (j == rowSize -1)){
-                cout << "Name of the atribute: " <<  "\"" << m_conditions.left << "\" has not been found in the relation" << endl;
-                return nullptr;
+                string sError = "Error. Cannot evaluate Selection. Name of the atribute: " + m_conditions.left + " has not been found in the relation";
+                throw  sError;
             }
         }
         //save name of atributes to project into final relation
@@ -168,8 +170,8 @@ shared_ptr<CRelation> CSelection::evaluate(vector<shared_ptr<CRelation>> & relat
                     break;
                 }
                 if(isHere == false && j == res.m_rows[0].m_values.size()-1){
-                    cout << "Name of the atribute: " <<  "\"" << m_conditions.right << "\" has not been found in the relation" << endl;
-                    return nullptr;
+                    string sError = "Error. Cannot evaluate Selection. Name of the atribute: " + m_conditions.right + " has not been found in the relation";
+                    throw  sError;
                 }
             }
             for(size_t j = 1; j < relations[0]->m_rows.size(); j++){

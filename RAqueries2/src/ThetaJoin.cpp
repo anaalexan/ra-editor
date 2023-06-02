@@ -59,8 +59,8 @@ shared_ptr<CRelation> CThetaJoin::evaluate(vector<shared_ptr<CRelation>> & relat
                break;
           }
           if(isHereL == false && j == sptr1->m_rows[0].m_values.size()-1){
-                cout << "Name of the atribute: " <<  "\"" << m_conditions.left << "\" has not been found in the relation" << endl;
-                return nullptr;
+               string sError = "Error. Cannot evaluate ThetaJoin. Name of the atribute: " + m_conditions.left  + " has not been found in the relation";
+               throw  sError;
           }
      }
 
@@ -74,8 +74,8 @@ shared_ptr<CRelation> CThetaJoin::evaluate(vector<shared_ptr<CRelation>> & relat
                break;
           }
           if(isHereR == false && j == sptr2->m_rows[0].m_values.size()-1){
-                cout << "Name of the atribute: " <<  "\"" << m_conditions.right << "\" has not been found in the relation" << endl;
-                return nullptr;
+               string sError = "Error. Cannot evaluate ThetaJoin. Name of the atribute: " + m_conditions.right  + " has not been found in the relation";
+               throw  sError;
           }
      }
      

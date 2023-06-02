@@ -105,119 +105,123 @@ int CMenuRAeditor::execute(){
         string key;
         getline(ss, key, ' '); 
 
-        switch(stringToEnum(toUpperCase(key))){
-            case(EKeywords::eEXIT):{
-                exit = true;
-                break;
-            }
-            case(EKeywords::eIMPORT):{
-                string word, path;
-                getline(ss, word, ' ');
-                getline(ss, path, ' ');
-                CExpression expresion(path, m_variables);
-                CVariable var(word, make_shared<CExpression>(expresion));
-                m_variables.push_back(var);
-                break;
-            }
-            case(EKeywords::ePRINT):{
-                string exp;
-                getline(ss, exp, '\n');
-                CExpression expression(exp, m_variables);
-                shared_ptr<CRelation>  sptr = expression.evaluate();
-                printResult(sptr);
-
-                break;
-            }
-            case(EKeywords::eEXPORT):{
-                string exp,path;
-                size_t i = key.size()+1;
-                int cnt = 0;
-                while(line[i] != '>' && cnt == 0 && i < line.size()){
-                    if(line[i] == ' ' ){
-                        i++;
-                        continue;
-                    }
-                    if(line[i] == '<'){
-                        cnt++;
-                    }
-                    if(line[i] == '>'){
-                        cnt--;
-                    }
-                    exp.push_back(line[i]);
-                    i++;
-                }
-                if(line[i] != '>'){
-                    cout << "Error. There is no path to export." << endl;
-                }
-                //skiping simbol "<"
-                i++;
-                
-                while(line[i] == ' ' && i < line.size()){
-                    i++;
-                }
-
-                while(i < line.size()){
-                    path.push_back(line[i]);
-                    i++;
-                }
-                CExpression expression(exp, m_variables);
-                shared_ptr<CRelation>  sptr = expression.evaluate();
-
-                CFileService file;
-                sptr->setPath(noQuots(path));
-                file.exportToFile(sptr);
-
-                break;
-            }
-            case(EKeywords::eTRANSLATE):{
-                break;
-            }
-            default:{
-                if(line.size() == 0){
+        try{
+            switch(stringToEnum(toUpperCase(key))){
+                case(EKeywords::eEXIT):{
+                    exit = true;
                     break;
                 }
-                string exp;
-                size_t i = 0;
-                string name;
-                
-                //string into two parts separated by '='
-                while (line[i] != '=') {
-                    i++;
+                case(EKeywords::eIMPORT):{
+                    string word, path;
+                    getline(ss, word, ' ');
+                    getline(ss, path, ' ');
+                    CExpression expresion(path, m_variables);
+                    CVariable var(word, make_shared<CExpression>(expresion));
+                    m_variables.push_back(var);
+                    break;
                 }
-                //first part befor '=' its the name of variable
-                bool space = false;
-                for(size_t j = 0; j < i; j++){
-                    while (line[j] == ' '){
-                        if(j == i-1){
-                            space = true;
-                            break;
+                case(EKeywords::ePRINT):{
+                    string exp;
+                    getline(ss, exp, '\n');
+                    CExpression expression(exp, m_variables);
+                    shared_ptr<CRelation>  sptr = expression.evaluate();
+                    printResult(sptr);
+
+                    break;
+                }
+                case(EKeywords::eEXPORT):{
+                    string exp,path;
+                    size_t i = key.size()+1;
+                    int cnt = 0;
+                    while(line[i] != '>' && cnt == 0 && i < line.size()){
+                        if(line[i] == ' ' ){
+                            i++;
+                            continue;
                         }
-                        j++;
+                        if(line[i] == '<'){
+                            cnt++;
+                        }
+                        if(line[i] == '>'){
+                            cnt--;
+                        }
+                        exp.push_back(line[i]);
+                        i++;
                     }
-                    if(space == true){
+                    if(line[i] != '>'){
+                        throw  "Error. There is no path to export (or missing simbol '>' befor path to export).";
+                    }
+                    //skiping simbol "<"
+                    i++;
+                    
+                    while(line[i] == ' ' && i < line.size()){
+                        i++;
+                    }
+
+                    while(i < line.size()){
+                        path.push_back(line[i]);
+                        i++;
+                    }
+                    CExpression expression(exp, m_variables);
+                    shared_ptr<CRelation>  sptr = expression.evaluate();
+
+                    CFileService file;
+                    sptr->setPath(noQuots(path));
+                    file.exportToFile(sptr);
+
+                    break;
+                }
+                case(EKeywords::eTRANSLATE):{
+                    break;
+                }
+                default:{
+                    if(line.size() == 0){
                         break;
                     }
-                    name.push_back(line[j]);
-                }
-                //skip simbol '='
-                i++;
-                //second part after '=' its expression for the variable
-                while (i < line.size())
-                {
-                    exp.push_back(line[i]);
+                    string exp;
+                    size_t i = 0;
+                    string name;
+                    
+                    //string into two parts separated by '='
+                    while (line[i] != '=') {
+                        i++;
+                    }
+                    //first part befor '=' its the name of variable
+                    bool space = false;
+                    for(size_t j = 0; j < i; j++){
+                        while (line[j] == ' '){
+                            if(j == i-1){
+                                space = true;
+                                break;
+                            }
+                            j++;
+                        }
+                        if(space == true){
+                            break;
+                        }
+                        name.push_back(line[j]);
+                    }
+                    //skip simbol '='
                     i++;
-                }
-                //in case exp is empty, that means there was no '=' symbol, so invalid command
-                if(exp.size() != 0){
-                    CExpression expression(exp, m_variables);
-                    CVariable var(name, make_shared<CExpression>(expression));
-                    m_variables.push_back(var);
-                }else{
-                    cout << "Invalid command." << endl;
+                    //second part after '=' its expression for the variable
+                    while (i < line.size())
+                    {
+                        exp.push_back(line[i]);
+                        i++;
+                    }
+                    //in case exp is empty, that means there was no '=' symbol, so invalid command
+                    if(exp.size() != 0){
+                        CExpression expression(exp, m_variables);
+                        CVariable var(name, make_shared<CExpression>(expression));
+                        m_variables.push_back(var);
+                    }else{
+                        throw  "Invalid command.";
+                    }
+
                 }
 
             }
-
+        }catch (string msg) {
+            cerr << msg << endl;
         }
             
     }

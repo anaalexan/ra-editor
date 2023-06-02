@@ -5,7 +5,36 @@
 
 using namespace std;
 
+vector<string> CNaturalJoin::relevantAtribute(vector<shared_ptr<CRelation>> & relations){
+    vector<string> vec;
+    string common;
+    CRow row1;
+    CRow row2;
 
+    row1 = importAtributes(relations[0]);
+    row2 = importAtributes(relations[1]);
+    bool isHere = false;
+    size_t rel2;
+     //looking for the common attribute between the relations
+    for(size_t i = 0; i < row1.m_values.size(); i++){
+        for(size_t j = 0; j < row2.m_values.size(); j++){
+            if(row1.m_values[i] == row2.m_values[j]){
+                common = row1.m_values[i];
+                isHere = true;
+                break;
+            }
+        }
+        if(isHere == true){
+            break;
+        }
+        if(isHere == false && i == row1.m_values.size() - 1){
+            throw  "No common attribute has been found between the relations. Natural join cannot be evaluate.";
+        }
+    }
+    
+    vec.push_back(common);
+    return vec;
+}
 shared_ptr<CRelation> CNaturalJoin::evaluateAtributes(vector<shared_ptr<CRelation>> & relations){
 
     shared_ptr<CRelation> sptr1;
@@ -30,8 +59,7 @@ shared_ptr<CRelation> CNaturalJoin::evaluateAtributes(vector<shared_ptr<CRelatio
             break;
         }
         if(isHere == false && i == row1.m_values.size() - 1){
-            cout << "No common attribute has been found between the relations. Natural join cannot be evaluate." << endl;
-            return nullptr;
+            throw "No common attribute has been found between the relations. Natural join cannot be evaluate.";
         }
     }
     res.m_rows.push_back(row1);
@@ -79,8 +107,7 @@ shared_ptr<CRelation> CNaturalJoin::evaluate(vector<shared_ptr<CRelation>> & rel
             break;
         }
         if(isHere == false && i == sptr1->m_rows[0].m_values.size() - 1){
-            cout << "No common attribute has been found between the relations. Natural join cannot be evaluate." << endl;
-            return nullptr;
+            throw "No common attribute has been found between the relations. Natural join cannot be evaluate.";
         }
     }
 

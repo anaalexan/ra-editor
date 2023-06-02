@@ -56,12 +56,14 @@ shared_ptr<CRelation> CRename::evaluateAtributes(vector<shared_ptr<CRelation>> &
         }      
     }
     if(m_oldNewNames.size() != 0){
-
-        cout << "Name, that you want to change: " << endl;
+            
+        string sError =  "Name, that you want to change:\n";
         for( size_t n = 0; n < m_oldNewNames.size(); n++){
-            cout <<  "\"" << m_oldNewNames[n].first << "\"" << endl;
+            sError += m_oldNewNames[n].first;
+            sError += "\n";
         }
-        cout << " has not been found in the relation" << endl;
+        sError += " has not been found in the relation";
+        throw sError;
     } 
     res.m_rows.push_back(row);
 

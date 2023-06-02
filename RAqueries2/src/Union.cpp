@@ -6,21 +6,23 @@ using namespace std;
 
 shared_ptr<CRelation> CUnion::evaluateAtributes(vector<shared_ptr<CRelation>> & relations){
 
-     shared_ptr<CRelation> sptr1;
-     CRow row1;
-     CRow row2;
+    shared_ptr<CRelation> sptr1;
+    CRow row1;
+    row1 = importAtributes(relations[0]);
+    CRow row2;
+    row2 = importAtributes(relations[1]);
 
-     row1 = importAtributes(relations[0]);
-     row2 = importAtributes(relations[1]);
-     CRelation res;
-     res.m_rows.push_back(row1);
-     //copy the name of colomns from second relation
-     for(size_t j = 0; j < row2.m_values.size(); j++){
-          res.m_rows[0].m_values.push_back(row2.m_values[j]);
-     }
+    CUnionCompatible valid;
+    if(!valid.isUnionCompatible(row1, row2)){
+        throw "Error. Cannot evaluate Union. Relations are not union compatible. Both relations should have the exact same attributes.";
+    }
+    CRelation res;
+    res.m_rows.push_back(row1);
+    
 
-     return make_shared<CRelation>(res); 
+    return make_shared<CRelation>(res); 
 }
+
 
 shared_ptr<CRelation> CUnion::evaluate(vector<shared_ptr<CRelation>> & relations){
 
@@ -30,12 +32,8 @@ shared_ptr<CRelation> CUnion::evaluate(vector<shared_ptr<CRelation>> & relations
     CRelation res;
 
     CUnionCompatible valid;
-    try{
-        if(!valid.isUnionCompatible(sptr1, sptr2)){
-            throw 505;
-        }
-    }catch (...) {
-        cout << "Relations are not union compatible. Both relations should have the exact same attributes." << endl;
+    if(!valid.isUnionCompatible(sptr1->m_rows[0], sptr2->m_rows[0])){
+        throw "Error. Cannot evaluate Union. Relations are not union compatible. Both relations should have the exact same attributes.";
     }
     
     for(size_t i = 0; i < sptr1->m_rows.size(); i++){

@@ -47,7 +47,8 @@ shared_ptr<CRelation> CProjection::evaluateAtributes(vector<shared_ptr<CRelation
                 break;
             }
             if(cnt == row1.m_values.size() - 1 && isHere == false){
-                cout << "Name of the column, that you want to project: " <<  "\"" << m_columnNames[i] << "\" has not been found in the relation" << endl;
+                string sError = "Error. Name of the column, that you want to project: "  + m_columnNames[i] + " has not been found in the relation";
+                throw sError;
             }
         }
     }
@@ -65,8 +66,8 @@ shared_ptr<CRelation> CProjection::evaluate(const string & path){
     CRelation res;
 
     if(!fin.is_open()){
-        cout << "Could not open file" << endl;
-        return nullptr;
+        string sError = "Error. Cannot open file: " + path;
+        throw  sError;
     }
     
     getline(fin, line);
@@ -95,7 +96,8 @@ shared_ptr<CRelation> CProjection::evaluate(const string & path){
             
         }
         if(isHere == false){
-            cout << "Name of the column, that you want to project: " <<  "\"" << m_columnNames[i] << "\" has not been found in the relation" << endl;
+            string sError = "Error. Name of the column, that you want to project: "  + m_columnNames[i] + " has not been found in the relation";
+            throw sError;
         }
         
 
@@ -210,7 +212,8 @@ shared_ptr<CRelation> CProjection::evaluate(vector<shared_ptr<CRelation>> & rela
                     break;
                 }
                 if(cnt == relations[0]->m_rows[0].m_values.size() - 1 && isHere == false){
-                    cout << "Name of the column, that you want to project: " <<  "\"" << m_columnNames[i] << "\" has not been found in the relation" << endl;
+                    string sError = "Error. Name of the column, that you want to project: "  + m_columnNames[i] + " has not been found in the relation";
+                    throw sError;
                 }
             }
         }
