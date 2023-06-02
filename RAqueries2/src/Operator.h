@@ -30,5 +30,12 @@ class COperator{
             }
             return sptr1;
         }
+
+        virtual vector<string> relevantAtribute(){
+            //string noRelevant = nullptr;
+            vector<string> vec;
+            //vec.push_back(noRelevant);
+            return vec;
+        }
         
 };

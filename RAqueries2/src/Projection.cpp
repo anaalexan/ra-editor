@@ -14,6 +14,14 @@ void CProjection::parse(const string & columnNames){
         m_columnNames.push_back(word);
     }
 }
+
+vector<string> CProjection::relevantAtribute(){
+    vector<string> vec;
+    for(size_t i = 0; i < m_columnNames.size(); i++){
+        vec.push_back(m_columnNames[i]);
+    }
+    return vec;
+}
 shared_ptr<CRelation> CProjection::evaluate(const string & path){
     /*shared_ptr<CRelation> sptr1;
     CFileService file;

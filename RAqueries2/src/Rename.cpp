@@ -19,6 +19,14 @@ void CRename::parse(const string & columnNames){
 
 }
 
+vector<string> CRename::relevantAtribute(){
+    vector<string> vec;
+    for(size_t i = 0; i < m_oldNewNames.size(); i++){
+        vec.push_back(m_oldNewNames[i].first);
+    }
+    return vec;
+}
+
 /*virtual shared_ptr<CRelation> evaluate(const vector<vector<CRow>> & relations) override;
         virtual shared_ptr<CRelation> evaluate(const vector<string> & paths) override;*/
 

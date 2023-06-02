@@ -16,6 +16,15 @@ string CSelection::konstant(string word){
     return newWord;
 }
 
+vector<string> CSelection::relevantAtribute(){
+    vector<string> vec;
+    vec.push_back(m_conditions.left);
+    if(m_conditions.right[0] != '\''){
+        vec.push_back(m_conditions.right); 
+    }
+    return vec;
+}
+
 shared_ptr<CRelation> CSelection::evaluate(const string & path){
     ifstream fin(path);
     string line, word;

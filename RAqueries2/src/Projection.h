@@ -17,4 +17,6 @@ class CProjection : public COperator{
         vector<string> m_columnNames;
 
         void parse(const string & columnNames);
+
+        virtual vector<string> relevantAtribute() override;
 };

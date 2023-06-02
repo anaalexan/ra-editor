@@ -15,4 +15,9 @@ class CRename : public COperator{
         vector<pair<string,string>> m_oldNewNames;
 
         void parse(const string & columnNames);
+
+        virtual vector<string> relevantAtribute() override;
+
+        
 };
+

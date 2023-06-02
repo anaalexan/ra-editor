@@ -19,4 +19,6 @@ class CSelection : public COperator{
         CConditionParser::CCondition m_conditions;
 
         string konstant(string word);
+
+        virtual vector<string> relevantAtribute() override;
 };

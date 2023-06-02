@@ -8,6 +8,7 @@
 #include "Token.h"
 #include "Relation.h"
 #include "KeyRA.h"
+#include "Operator.h"
 //#include "Variable.h"
 
 class CVariable;
@@ -23,6 +24,9 @@ class CExpression{
 	private:
 		EKeyRA charToEnum(char c);
 		void tokenize(const string & expression, const vector<CVariable> & variables);
+
+		vector<string> m_relevantAtribute;
+		vector<string> findRelevantAtribute();
 
 		
 		

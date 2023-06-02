@@ -7,6 +7,13 @@
 
 using namespace std;
 
+vector<string> CThetaJoin::relevantAtribute(){
+     vector<string> vec;
+     vec.push_back(m_conditions.left);
+     vec.push_back(m_conditions.right);
+     return vec;
+}
+
 shared_ptr<CRelation> CThetaJoin::evaluate(vector<shared_ptr<CRelation>> & relations){
      shared_ptr<CRelation> sptr1 = importRelation(relations[0]);
      shared_ptr<CRelation> sptr2 = importRelation(relations[1]);
