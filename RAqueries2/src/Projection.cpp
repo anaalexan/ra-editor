@@ -15,13 +15,46 @@ void CProjection::parse(const string & columnNames){
     }
 }
 
-vector<string> CProjection::relevantAtribute(){
+vector<string> CProjection::relevantAtribute(vector<shared_ptr<CRelation>> & relations){
     vector<string> vec;
     for(size_t i = 0; i < m_columnNames.size(); i++){
         vec.push_back(m_columnNames[i]);
     }
     return vec;
 }
+
+shared_ptr<CRelation> CProjection::evaluateAtributes(vector<shared_ptr<CRelation>> & relations){
+
+    shared_ptr<CRelation> sptr1;
+
+    CRow row1;
+    row1 = importAtributes(relations[0]);
+    CRelation res;
+
+    bool isHere = false;
+    CRow rowName;
+    //search for an atributres for projection
+    for(size_t i = 0; i < m_columnNames.size(); i++){
+            
+        isHere = false;
+        for(size_t cnt = 0; cnt < row1.m_values.size(); cnt++){
+            if(m_columnNames[i] == row1.m_values[cnt]){
+                isHere = true;
+
+                //copy name of the atribute into final relation
+                rowName.m_values.push_back(row1.m_values[cnt]);
+                   
+                break;
+            }
+            if(cnt == row1.m_values.size() - 1 && isHere == false){
+                cout << "Name of the column, that you want to project: " <<  "\"" << m_columnNames[i] << "\" has not been found in the relation" << endl;
+            }
+        }
+    }
+    res.m_rows.push_back(rowName);
+    return make_shared<CRelation>(res); 
+}
+
 shared_ptr<CRelation> CProjection::evaluate(const string & path){
     /*shared_ptr<CRelation> sptr1;
     CFileService file;

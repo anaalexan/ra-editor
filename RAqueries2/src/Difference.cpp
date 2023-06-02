@@ -1,7 +1,32 @@
 #include "Difference.h"
+#include "UnionCompatible.h"
+#include <iostream>
 
 
 using namespace std;
+
+shared_ptr<CRelation> CDifference::evaluateAtributes(vector<shared_ptr<CRelation>> & relations){
+
+    shared_ptr<CRelation> sptr1;
+    CRow row1;
+    row1 = importAtributes(relations[0]);
+    CRow row2;
+    row2 = importAtributes(relations[1]);
+
+    CUnionCompatible valid;
+    try{
+        if(!valid.isUnionCompatible(row1, row2)){
+            throw 505;
+        }
+    }catch (...) {
+            cout << "Relations are not union compatible. Both relations should have the exact same attributes." << endl;
+    }
+    CRelation res;
+    res.m_rows.push_back(row1);
+    
+
+    return make_shared<CRelation>(res); 
+}
 
 shared_ptr<CRelation> CDifference::evaluate(vector<shared_ptr<CRelation>> & relations) {
     shared_ptr<CRelation> sptr1 = importRelation(relations[0]);
@@ -10,7 +35,13 @@ shared_ptr<CRelation> CDifference::evaluate(vector<shared_ptr<CRelation>> & rela
     CRelation res;
 
     CUnionCompatible valid;
-    valid.isUnionCompatible(sptr1, sptr2);
+    try{
+        if(!valid.isUnionCompatible(sptr1->m_rows[0], sptr2->m_rows[0])){
+            throw 505;
+        }
+    }catch (...) {
+            cout << "Relations are not union compatible. Both relations should have the exact same attributes." << endl;
+    }
 
     
     bool same = false;

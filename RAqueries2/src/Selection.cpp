@@ -16,13 +16,24 @@ string CSelection::konstant(string word){
     return newWord;
 }
 
-vector<string> CSelection::relevantAtribute(){
+vector<string> CSelection::relevantAtribute(vector<shared_ptr<CRelation>> & relations){
     vector<string> vec;
     vec.push_back(m_conditions.left);
     if(m_conditions.right[0] != '\''){
         vec.push_back(m_conditions.right); 
     }
     return vec;
+}
+
+shared_ptr<CRelation> CSelection::evaluateAtributes(vector<shared_ptr<CRelation>> & relations){
+
+    shared_ptr<CRelation> sptr1;
+
+    CRow row1;
+    row1 = importAtributes(relations[0]);
+    CRelation res;
+    res.m_rows.push_back(row1);
+    return make_shared<CRelation>(res); 
 }
 
 shared_ptr<CRelation> CSelection::evaluate(const string & path){

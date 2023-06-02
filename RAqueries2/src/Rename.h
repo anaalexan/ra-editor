@@ -16,7 +16,9 @@ class CRename : public COperator{
 
         void parse(const string & columnNames);
 
-        virtual vector<string> relevantAtribute() override;
+        virtual shared_ptr<CRelation> evaluateAtributes(vector<shared_ptr<CRelation>> & relations) override;
+
+        virtual vector<string> relevantAtribute(vector<shared_ptr<CRelation>> & relations) override;
 
         
 };

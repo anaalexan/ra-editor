@@ -6,6 +6,56 @@
 using namespace std;
 
 
+shared_ptr<CRelation> CNaturalJoin::evaluateAtributes(vector<shared_ptr<CRelation>> & relations){
+
+    shared_ptr<CRelation> sptr1;
+    CRow row1;
+    CRow row2;
+
+    row1 = importAtributes(relations[0]);
+    row2 = importAtributes(relations[1]);
+    CRelation res;
+    bool isHere = false;
+    size_t rel2;
+     //looking for the common attribute between the relations
+    for(size_t i = 0; i < row1.m_values.size(); i++){
+        for(size_t j = 0; j < row2.m_values.size(); j++){
+            if(row1.m_values[i] == row2.m_values[j]){
+                rel2 = j;
+                isHere = true;
+                break;
+            }
+        }
+        if(isHere == true){
+            break;
+        }
+        if(isHere == false && i == row1.m_values.size() - 1){
+            cout << "No common attribute has been found between the relations. Natural join cannot be evaluate." << endl;
+            return nullptr;
+        }
+    }
+    res.m_rows.push_back(row1);
+
+    //copy the name of colomns from second relation (exept the one common between first and second relation)
+    for(size_t j = 0; j < row2.m_values.size(); j++){
+        if(j != rel2){
+            res.m_rows[0].m_values.push_back(row2.m_values[j]);
+        }else{
+            continue;
+        }
+    }
+
+     /*
+     //copy the name of colomns from first relation
+     res.m_rows.push_back(row1);
+     //copy the name of colomns from second relation
+     for(size_t j = 0; j < row2.m_values.size(); j++){
+          res.m_rows[0].m_values.push_back(row2.m_values[j]);
+     }*/
+
+     return make_shared<CRelation>(res); 
+}
+
 shared_ptr<CRelation> CNaturalJoin::evaluate(vector<shared_ptr<CRelation>> & relations){
     shared_ptr<CRelation> sptr1 = importRelation(relations[0]);
     shared_ptr<CRelation> sptr2 = importRelation(relations[1]);
@@ -34,7 +84,7 @@ shared_ptr<CRelation> CNaturalJoin::evaluate(vector<shared_ptr<CRelation>> & rel
         }
     }
 
-    //copy the name of colomns from second relation
+    //copy the name of colomns from first relation
     res.m_rows.push_back(sptr1->m_rows[0]);
 
     //copy the name of colomns from second relation (exept the one common between first and second relation)
@@ -45,6 +95,8 @@ shared_ptr<CRelation> CNaturalJoin::evaluate(vector<shared_ptr<CRelation>> & rel
             continue;
         }
     }
+
+    //join the rest of the relation
     for(size_t i = 1; i < sptr1->m_rows.size(); i++){
         for(size_t j = 1; j < sptr2->m_rows.size(); j++){
             string word1 = sptr1->m_rows[i].m_values[rel1];

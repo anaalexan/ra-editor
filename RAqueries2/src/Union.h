@@ -11,5 +11,7 @@ class CUnion : public COperator, public CUnionCompatible{
 		:COperator(EOperatorType::BINARY){};
 
         virtual shared_ptr<CRelation> evaluate(vector<shared_ptr<CRelation>> & relations) override;
+
+        virtual shared_ptr<CRelation> evaluateAtributes(vector<shared_ptr<CRelation>> & relations) override;
         
 };

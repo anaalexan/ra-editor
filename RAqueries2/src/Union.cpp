@@ -4,6 +4,24 @@
 
 using namespace std;
 
+shared_ptr<CRelation> CUnion::evaluateAtributes(vector<shared_ptr<CRelation>> & relations){
+
+     shared_ptr<CRelation> sptr1;
+     CRow row1;
+     CRow row2;
+
+     row1 = importAtributes(relations[0]);
+     row2 = importAtributes(relations[1]);
+     CRelation res;
+     res.m_rows.push_back(row1);
+     //copy the name of colomns from second relation
+     for(size_t j = 0; j < row2.m_values.size(); j++){
+          res.m_rows[0].m_values.push_back(row2.m_values[j]);
+     }
+
+     return make_shared<CRelation>(res); 
+}
+
 shared_ptr<CRelation> CUnion::evaluate(vector<shared_ptr<CRelation>> & relations){
 
     shared_ptr<CRelation> sptr1 = importRelation(relations[0]);

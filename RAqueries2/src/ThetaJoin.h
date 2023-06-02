@@ -14,7 +14,11 @@ class CThetaJoin : public COperator{
 
         virtual shared_ptr<CRelation> evaluate(vector<shared_ptr<CRelation>> & relations) override;
 
-        virtual vector<string> relevantAtribute() override;
+        virtual shared_ptr<CRelation> evaluateAtributes(vector<shared_ptr<CRelation>> & relations) override;
+
+        virtual vector<string> relevantAtribute(vector<shared_ptr<CRelation>> & relations) override;
+
+        
     private:
         CConditionParser::CCondition m_conditions;
 };

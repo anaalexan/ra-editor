@@ -5,7 +5,24 @@
 #include "Operator.h"
 
 using namespace std;
+shared_ptr<CRelation> CCrossJoin::evaluateAtributes(vector<shared_ptr<CRelation>> & relations){
 
+     shared_ptr<CRelation> sptr1;
+     CRow row1;
+     CRow row2;
+
+     row1 = importAtributes(relations[0]);
+     row2 = importAtributes(relations[1]);
+     CRelation res;
+     //copy the name of colomns from first relation
+     res.m_rows.push_back(row1);
+     //copy the name of colomns from second relation
+     for(size_t j = 0; j < row2.m_values.size(); j++){
+          res.m_rows[0].m_values.push_back(row2.m_values[j]);
+     }
+
+     return make_shared<CRelation>(res); 
+}
 
 shared_ptr<CRelation> CCrossJoin::evaluate(vector<shared_ptr<CRelation>> & relations) {
     shared_ptr<CRelation> sptr1 = importRelation(relations[0]);
@@ -28,7 +45,7 @@ shared_ptr<CRelation> CCrossJoin::evaluate(vector<shared_ptr<CRelation>> & relat
                 res.m_rows.push_back(row);
             }
         }else{
-            //copy first row with the names of the columns (can by only one row)
+            //copy first row with the names of the columns (can be only one row)
             res.m_rows.push_back(row);
         }
     }

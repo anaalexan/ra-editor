@@ -7,16 +7,10 @@ using namespace std;
 class CFileService{
     public:
         CFileService() = default;
-        bool exportToFile(shared_ptr<CRelation> data);  //to csv
+        bool exportToFile(shared_ptr<CRelation> data); 
 
-        // open file based on path in data
+        bool importFromFile(const shared_ptr<CRelation> data);
 
-        // write from data to cells in file
-
-        bool importFromFile(const shared_ptr<CRelation> data);   //only path
-
-        // open file based on path in data
-
-        // load cells from file to data object
+        CRow importAtriburesFromFile(const shared_ptr<CRelation> data);
 
 };

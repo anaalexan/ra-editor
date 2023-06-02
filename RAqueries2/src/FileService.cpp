@@ -27,6 +27,27 @@ bool CFileService::exportToFile(shared_ptr<CRelation> data) {
 
 }
 
+CRow CFileService::importAtriburesFromFile(const shared_ptr<CRelation> data){
+    ifstream fin(data->getPath());
+    string line, word;
+    CRow row;
+
+    if(!fin.is_open()){
+        cout << "Could not open file" << endl;
+        return row;
+    }
+    
+    getline(fin, line);
+    size_t i = 0;
+    stringstream ss(line);
+    while (getline(ss, word, ',')){
+        row.m_values.push_back(word);
+    }
+
+    fin.close();
+    return row;
+}
+
 bool CFileService::importFromFile(const shared_ptr<CRelation> data){
     ifstream fin(data->getPath());
     string line, word;
@@ -46,6 +67,8 @@ bool CFileService::importFromFile(const shared_ptr<CRelation> data){
         }
         data->m_rows.push_back(row);
     }
+
+    
 
     /*for (const auto & element : data->m_rows){
         
