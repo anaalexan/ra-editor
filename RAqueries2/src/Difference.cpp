@@ -5,12 +5,14 @@
 
 using namespace std;
 
-pair<bool,string> CDifference::toSQL(vector<pair<bool,string>> & relations, size_t & index){
-    string str1 = operatorToString(relations[0], index);
-    string str2 = operatorToString(relations[1], index);
-    string res = str1 + "MINUS\n" + str2;    
-    bool isTMPres = true;
-    return make_pair(isTMPres, res);
+
+pair<bool,vector<string>> CDifference::toSQL(vector<pair<bool,vector<string>>> & relations, size_t & index){
+    string name1, name2;
+    vector<string> newQuery;
+    operatorToString(newQuery, relations[0], index, name1);
+    newQuery.push_back("MINUS\n");
+    operatorToString(newQuery, relations[1], index, name2); 
+    return make_pair(true, newQuery);
 }
 
 shared_ptr<CRelation> CDifference::evaluateAtributes(vector<shared_ptr<CRelation>> & relations){

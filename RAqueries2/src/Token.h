@@ -15,11 +15,16 @@ class CToken{
 		shared_ptr<CRelation> m_relation;
 		shared_ptr<COperator> m_operator;
 
+		
+
 		CToken (ETokenType type, shared_ptr<CRelation> relation) // Constructor
 		:m_type(type), m_relation(relation), m_operator(nullptr){};
 
 		CToken (ETokenType type, shared_ptr<COperator> op) // Constructor
 		:m_type(type), m_relation(nullptr), m_operator(op){};
+
+		
+
 
 	private:		
 		

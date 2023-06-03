@@ -86,6 +86,13 @@ res = kart1 kart2 x
 export res > /home/progtest/Downloads/resKartnew.csv
 print res
 
+translate "/home/progtest/Downloads/kart1.csv" "/home/progtest/Downloads/kart2.csv" *
+
+import LOD "lod.csv"
+import REZERVACE "REZERVACE.csv"
+
+translate "LOD" "REZERVACE" * "ZAKAZNIK" * (JMENO_Z=='Iásón') [JMENO_L]<JMENO_L,NAZEV_LOD> "IasonShips.csv" +
+
 
 
 */
@@ -171,6 +178,13 @@ int CMenuRAeditor::execute(){
                     break;
                 }
                 case(EKeywords::eTRANSLATE):{
+                    string exp;
+                    getline(ss, exp, '\n');
+                    CExpression expression(exp, m_variables);
+                    vector<string> res = expression.translateToSQL();
+                    for(size_t i = 0; i < res.size(); i++){
+                        cout << res[i];
+                    }
                     break;
                 }
                 default:{

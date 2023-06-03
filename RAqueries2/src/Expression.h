@@ -20,14 +20,16 @@ class CExpression{
 
 	    shared_ptr<CRelation> evaluate();
 
-		vector<shared_ptr<CToken>> m_tokens;	
+		vector<shared_ptr<CToken>> m_tokens;
+		vector<string> translateToSQL();
+			
 	private:
 		EKeyRA charToEnum(char c);
 		void tokenize(const string & expression, const vector<CVariable> & variables);
 
 		vector<string> m_relevantAtribute;
 		vector<string> findRelevantAtribute();
-		string translateToSQL();
+		
 
 		
 		

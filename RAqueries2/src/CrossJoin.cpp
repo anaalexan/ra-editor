@@ -6,20 +6,24 @@
 
 using namespace std;
 
-pair<bool,string> CCrossJoin::toSQL(vector<pair<bool,string>> & relations, size_t & index){
-    string str1 = operatorToString(relations[0], index);
-    string str2 = operatorToString(relations[1], index);
-    size_t i = str1.size()-1;
-    str1[i] = ',';
-    if(relations[1].first == false){
-          str2 = relations[1].second + "\n";
-    }else{
-          str2 = "(" + relations[1].second + ")" + " AS TMP" + to_string(index++) + "\n";;
-    }
 
-    string res = str1 + " " + str2;    
-    bool isTMPres = true;
-    return make_pair(isTMPres, res);
+
+pair<bool,vector<string>> CCrossJoin::toSQL(vector<pair<bool,vector<string>>> & relations, size_t & index){
+    string name1, name2;
+    vector<string> newQuery;
+    operatorToString(newQuery, relations[0], index, name1);
+    size_t i = newQuery.size()-1;
+    size_t j = newQuery[i].size()-1;
+    newQuery[i][j] = ','; 
+    string str2;
+    if(relations[1].first == false){
+        newQuery[newQuery.size()-1] += " " + relations[1].second[0] + "\n";
+        //newQuery.push_back(" ");
+        //newQuery.push_back(relations[1].second[0] + "\n");
+    }else{
+        makeTmpSTR(newQuery, relations[1], index, name2);
+    }
+    return make_pair(true, newQuery);
 }
 shared_ptr<CRelation> CCrossJoin::evaluateAtributes(vector<shared_ptr<CRelation>> & relations){
 

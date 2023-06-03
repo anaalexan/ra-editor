@@ -5,20 +5,19 @@
 
 using namespace std;
 
-pair<bool,string> CNaturalJoin::toSQL(vector<pair<bool,string>> & relations, size_t & index){
-    string str1 = operatorToString(relations[0], index);
 
-    string str2;
-    string name2;
+pair<bool,vector<string>> CNaturalJoin::toSQL(vector<pair<bool,vector<string>>> & relations, size_t & index){
+    string name1, name2;
+    vector<string> newQuery;
+    operatorToString(newQuery, relations[0], index, name1);
+    newQuery.push_back("NATURAL JOIN ");
     if(relations[1].first == false){
-          str2 = relations[1].second + "\n";
+        newQuery[newQuery.size()-1] += relations[1].second[0] + "\n";
+        //newQuery.push_back(relations[1].second[0] + "\n");
     }else{
-          str2 = "(" + relations[1].second + ")" + " AS TMP" + to_string(index++) + "\n";;
+        makeTmpSTR(newQuery, relations[1], index, name2);
     }
-       
-    string res = str1 + "NATURAL JOIN " + str2; 
-    bool isTMPres = true;
-    return make_pair(isTMPres, res);
+    return make_pair(true, newQuery);
 }
 
 vector<string> CNaturalJoin::relevantAtribute(vector<shared_ptr<CRelation>> & relations){

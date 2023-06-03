@@ -3,14 +3,37 @@
 #include <iostream>
 
 using namespace std;
+/*void makeTmpSTR(vector<string> & newQuery, size_t & index, string & name, const vector<string> & oldQuery){
+            newQuery.push_back("\n");
+            newQuery.push_back(tab + "( \n" );
+            for (auto & element : oldQuery){
+                newQuery.push_back(tab + element);
+            }
+            name = "TMP" + to_string(++index);
+            newQuery.push_back(") AS " + name);
+        }
+        
+
+        void operatorToString(vector<string> & newQuery, const pair<bool,vector<string>> & relations, size_t & index, string & name){
+            
+            newQuery.push_back("SELECT DISTINCT *\n");
+            newQuery.push_back("FROM ");
+            if(relations.first == false){
+                name = relations.second[0];
+                newQuery.push_back(name + "\n");
+            }else{
+                makeTmpSTR(newQuery, index, name, relations.second);
+            }
+        }*/
 
 
-pair<bool,string> CUnion::toSQL(vector<pair<bool,string>> & relations, size_t & index){
-    string str1 = operatorToString(relations[0], index);
-    string str2 = operatorToString(relations[1], index);
-    string res = str1 + "\nUNION\n" + str2;    
-    bool isTMPres = true;
-    return make_pair(isTMPres, res);
+pair<bool,vector<string>> CUnion::toSQL(vector<pair<bool,vector<string>>> & relations, size_t & index){
+    string name1, name2;
+    vector<string> newQuery;
+    operatorToString(newQuery, relations[0], index, name1);
+    newQuery.push_back("UNION\n");
+    operatorToString(newQuery, relations[1], index, name2); 
+    return make_pair(true, newQuery);
 }
 
 shared_ptr<CRelation> CUnion::evaluateAtributes(vector<shared_ptr<CRelation>> & relations){

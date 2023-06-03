@@ -19,7 +19,6 @@ string CConditionParser::enumTostring(CConditionParser::EOperatorType & op){
     if(op == eGreater) return ">";
     if(op == eGreaterOrEqual) return ">=";
     return " ";
-
 }
 
 

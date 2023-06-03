@@ -21,19 +21,22 @@
 
 
 using namespace std;
+/*pair<bool,vector<string>> CSelection::toSQL(vector<pair<bool,vector<string>>> & relations, size_t & index){*/
 
-
-string CExpression::translateToSQL(){
-    vector<pair<bool,string>> stack;
+vector<string> CExpression::translateToSQL(){
+    vector<pair<bool,vector<string>>> stack;
     size_t index = 0;
     for(size_t i = 0; i < m_tokens.size(); i++){
+        size_t siz = m_tokens.size();
         if(m_tokens[i]->m_type ==  CToken::ETokenType::RELATION){
             bool isTMPres = false;
+            vector<string> vec;
             string path = m_tokens[i]->m_relation->getPath();
-            stack.push_back(make_pair(isTMPres, path));
+            vec.push_back(path);
+            stack.push_back(make_pair(false, vec));
         }
         if(m_tokens[i]->m_type ==  CToken::ETokenType::OPERATOR){
-            vector<pair<bool,string>> relations;
+            vector<pair<bool,vector<string>>> relations;
             if(m_tokens[i]->m_operator->m_type == COperator::EOperatorType::BINARY){
                 relations.push_back(*(stack.end()-2));
                 relations.push_back(*(stack.end()-1));
@@ -47,11 +50,11 @@ string CExpression::translateToSQL(){
                 stack.pop_back();
             }
             
-            pair<bool,string> res = m_tokens[i]->m_operator->toSQL(relations, index);
+            pair<bool,vector<string>> res = m_tokens[i]->m_operator->toSQL(relations, index);
             stack.push_back(res);
 
             //delete evalueted operator and operand/s
-            if(m_tokens[i]->m_operator->m_type == COperator::EOperatorType::BINARY){
+            /*if(m_tokens[i]->m_operator->m_type == COperator::EOperatorType::BINARY){
                 m_tokens.pop_back();
                 m_tokens.pop_back();
                 m_tokens.pop_back();
@@ -59,13 +62,12 @@ string CExpression::translateToSQL(){
             if(m_tokens[i]->m_operator->m_type == COperator::EOperatorType::UNARY){
                 m_tokens.pop_back();
                 m_tokens.pop_back();
-            }
+            }*/
 
         }
     }
-    if(m_tokens.size() != 0 || stack.size() != 1){
-        cout << "Error. Cannot translate to SQL. Wrong number of operators or operands." << endl;
-        return nullptr;
+    if(stack.size() != 1){
+        throw "Error. Cannot translate to SQL. Wrong number of operators or operands.";
     }else{
         return stack[0].second;
     }
@@ -168,8 +170,7 @@ void CExpression::tokenize(const string & expression, const vector<CVariable> & 
                     i++;
                 }
                 if(expression[i] != ']'){
-                    cout << "Error. Missing closing brasket ']'." << endl;
-                    break;
+                    throw "Error. Missing closing brasket ']'.";
                 }
                 CProjection op(columnNames);
                 CToken tok (CToken::ETokenType::OPERATOR, make_shared<CProjection>(op)) ;
@@ -184,9 +185,8 @@ void CExpression::tokenize(const string & expression, const vector<CVariable> & 
                     columnNames.push_back(expression[i]);
                     i++;
                 }
-                if(expression[i] != ']'){
-                    cout << "Error. Missing closing brasket '>'." << endl;
-                    break;
+                if(expression[i] != '>'){
+                    throw "Error. Missing closing brasket '>'.";
                 }
                 CRename op(columnNames);
                 CToken tok (CToken::ETokenType::OPERATOR, make_shared<CRename>(op)) ;
@@ -211,8 +211,7 @@ void CExpression::tokenize(const string & expression, const vector<CVariable> & 
                     
                 }
                 if(expression[i] != ')' && cnt == 0){
-                    cout << "Error. Missing closing brasket ')'." << endl;
-                    break;
+                    throw "Error. Missing closing brasket ')'.";
                 }
                 CSelection op(condition);
                 CToken tok (CToken::ETokenType::OPERATOR, make_shared<CSelection>(op)) ;
@@ -244,8 +243,7 @@ void CExpression::tokenize(const string & expression, const vector<CVariable> & 
                     i++;
                 }
                 if(expression[i] != ')' && cnt == 0){
-                    cout << "Error. Missing closing brasket ')'." << endl;
-                    break;
+                    throw "Error. Missing closing brasket ')'.";
                 }
                 CThetaJoin op(condition);
                 CToken tok (CToken::ETokenType::OPERATOR, make_shared<CThetaJoin>(op)) ;
@@ -268,8 +266,7 @@ void CExpression::tokenize(const string & expression, const vector<CVariable> & 
                     i++;
                 }
                 if(expression[i] != '"'){
-                    cout << "Error. Missing closing quotation mark '\"'." << endl;
-                    break;
+                    throw "Error. Missing closing quotation mark '\"'.";
                 }
                 CRelation rel(path);
                 CToken tok (CToken::ETokenType::RELATION, make_shared<CRelation>(rel)) ;
@@ -303,7 +300,7 @@ void CExpression::tokenize(const string & expression, const vector<CVariable> & 
                         break;
                     }
                     if(j == variables.size()-1 && isHere == false){
-                        cout << "There is no variable with the name: " << word << endl;
+                        throw "There is no variable with the name: ";
                     }
                 }
 
@@ -338,7 +335,7 @@ shared_ptr<CRelation> CExpression::evaluate(){
             res = m_tokens[i]->m_operator->evaluate(relations);
             stack.push_back(res);
 
-            //delete evalueted operator and operand/s
+           /* //delete evalueted operator and operand/s
             if(m_tokens[i]->m_operator->m_type == COperator::EOperatorType::BINARY){
                 m_tokens.pop_back();
                 m_tokens.pop_back();
@@ -347,14 +344,13 @@ shared_ptr<CRelation> CExpression::evaluate(){
             if(m_tokens[i]->m_operator->m_type == COperator::EOperatorType::UNARY){
                 m_tokens.pop_back();
                 m_tokens.pop_back();
-            }
+            }*/
 
 
         }
     }
-    if(m_tokens.size() != 0 || stack.size() != 1){
-        cout << "Error. Wrong number of operators or operands." << endl;
-        return nullptr;
+    if(/*m_tokens.size() != 0 || */stack.size() != 1){
+        throw "Error. Wrong number of operators or operands.";
     }else{
         return stack[0];
     }

@@ -15,27 +15,29 @@ void CProjection::parse(const string & columnNames){
     }
 }
 
-pair<bool,string> CProjection::toSQL(vector<pair<bool,string>> & relations, size_t & index){
-    string str1 = "SELECT DISTINCT ";
-    string names;
+pair<bool,vector<string>> CProjection::toSQL(vector<pair<bool,vector<string>>> & relations, size_t & index){
+    string names, name1;
+    vector<string> newQuery;
+    newQuery.push_back("SELECT DISTINCT ");
     for( size_t n = 0; n < m_columnNames.size(); n++){
         if(n != 0){
             names += ", ";
         }
         names += m_columnNames[n];
     }
-
     string from = "\nFROM ";
-    string name1;
+    newQuery[newQuery.size()-1] += names;
+    newQuery.push_back(from);
+    
+    
     if(relations[0].first == false){
-        name1 = relations[0].second;
+        //newQuery.push_back(r + "\n");
+        newQuery[newQuery.size()-1] += relations[0].second[0] + "\n";
     }else{
-        name1 += "(" + relations[0].second + ")" + "AS TMP" + to_string(index++) + "\n";
+        makeTmpSTR(newQuery, relations[0], index, name1);
     }
       
-    string res = str1 + names + from + name1;
-    bool isTMPres = true;
-    return make_pair(isTMPres, res);
+    return make_pair(true, newQuery);
 }
 
 vector<string> CProjection::relevantAtribute(vector<shared_ptr<CRelation>> & relations){

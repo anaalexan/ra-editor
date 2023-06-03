@@ -18,17 +18,34 @@ string CSelection::konstant(string word){
     return newWord;
 }
 
-pair<bool,string> CSelection::toSQL(vector<pair<bool,string>> & relations, size_t & index){
-    string str1 = "SELECT DISTINCT * \nFROM ";
-    string name1;
+/*pair<bool,vector<string>> CRename::toSQL(vector<pair<bool,vector<string>>> & relations, size_t & index){
+    vector<string> newQuery;
+    newQuery.push_back("SELECT DISTINCT ");
+    string names,name1;
+    for( size_t n = 0; n < m_oldNewNames.size(); n++){
+        if(n != 0){
+            names += ", ";
+        }
+        names += m_oldNewNames[n].first + " AS " + m_oldNewNames[n].second ;
+    }
+    string from = "\nFROM ";
+    newQuery.push_back(names);
+    newQuery.push_back(from);
     if(relations[0].first == false){
-          name1 = relations[0].second;
-          str1 += name1 + "\n";
-     }else{
-          name1 = "TMP" + to_string(index++);
-          str1 += "(" + relations[0].second + ")" + " AS " + name1 + "\n";
-     }
-      
+        newQuery.push_back(relations[0].second[0] + "\n");
+    }else{
+        makeTmpSTR(newQuery, relations[0].second, index, name1);
+    }
+    
+    return make_pair(true, newQuery);
+}*/
+
+pair<bool,vector<string>> CSelection::toSQL(vector<pair<bool,vector<string>>> & relations, size_t & index){
+    string name1;
+    vector<string> newQuery;
+    operatorToString(newQuery, relations[0], index, name1);
+    newQuery.push_back("WHERE ");
+    
     CConditionParser enumOperator;
     string conRight;
     if(m_conditions.right[0] == '\''){
@@ -42,9 +59,9 @@ pair<bool,string> CSelection::toSQL(vector<pair<bool,string>> & relations, size_
     }
 
     string condition = name1 + "." + m_conditions.left + " " + enumOperator.enumTostring(m_conditions.m_operator) + " " +  conRight;
-    string res = str1 + "WHERE " + condition;
-    bool isTMPres = true;
-    return make_pair(isTMPres, res);
+    newQuery[newQuery.size()-1] += condition + "\n";
+    //newQuery.push_back(condition + "\n");
+    return make_pair(true, newQuery);
 }
 
 vector<string> CSelection::relevantAtribute(vector<shared_ptr<CRelation>> & relations){

@@ -18,28 +18,29 @@ void CRename::parse(const string & columnNames){
     }
 
 }
-
-pair<bool,string> CRename::toSQL(vector<pair<bool,string>> & relations, size_t & index){
-    string str1 = "SELECT DISTINCT ";
-    string names;
+pair<bool,vector<string>> CRename::toSQL(vector<pair<bool,vector<string>>> & relations, size_t & index){
+    vector<string> newQuery;
+    newQuery.push_back("SELECT DISTINCT ");
+    string names,name1;
     for( size_t n = 0; n < m_oldNewNames.size(); n++){
         if(n != 0){
             names += ", ";
         }
-        names += m_oldNewNames[n].first + " AS " + m_oldNewNames[n].first ;
+        names += m_oldNewNames[n].first + " AS " + m_oldNewNames[n].second ;
     }
-
+   
+    newQuery[newQuery.size()-1] += names;
+    //newQuery.push_back(names); 
     string from = "\nFROM ";
-    string name1;
+    newQuery.push_back(from);
     if(relations[0].first == false){
-        name1 = relations[0].second;
+        newQuery[newQuery.size()-1] += relations[0].second[0] + "\n";
+        //newQuery.push_back();
     }else{
-        name1 += "(" + relations[0].second + ")" + "AS TMP" + to_string(index++) + "\n";
+        makeTmpSTR(newQuery, relations[0], index, name1);
     }
-      
-    string res = str1 + names + from + name1;
-    bool isTMPres = true;
-    return make_pair(isTMPres, res);
+    
+    return make_pair(true, newQuery);
 }
 
 vector<string> CRename::relevantAtribute(vector<shared_ptr<CRelation>> & relations){
