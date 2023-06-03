@@ -5,6 +5,22 @@
 #include "Operator.h"
 
 using namespace std;
+
+pair<bool,string> CCrossJoin::toSQL(vector<pair<bool,string>> & relations, size_t & index){
+    string str1 = operatorToString(relations[0], index);
+    string str2 = operatorToString(relations[1], index);
+    size_t i = str1.size()-1;
+    str1[i] = ',';
+    if(relations[1].first == false){
+          str2 = relations[1].second + "\n";
+    }else{
+          str2 = "(" + relations[1].second + ")" + " AS TMP" + to_string(index++) + "\n";;
+    }
+
+    string res = str1 + " " + str2;    
+    bool isTMPres = true;
+    return make_pair(isTMPres, res);
+}
 shared_ptr<CRelation> CCrossJoin::evaluateAtributes(vector<shared_ptr<CRelation>> & relations){
 
      shared_ptr<CRelation> sptr1;

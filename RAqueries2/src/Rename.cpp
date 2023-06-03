@@ -19,6 +19,29 @@ void CRename::parse(const string & columnNames){
 
 }
 
+pair<bool,string> CRename::toSQL(vector<pair<bool,string>> & relations, size_t & index){
+    string str1 = "SELECT DISTINCT ";
+    string names;
+    for( size_t n = 0; n < m_oldNewNames.size(); n++){
+        if(n != 0){
+            names += ", ";
+        }
+        names += m_oldNewNames[n].first + " AS " + m_oldNewNames[n].first ;
+    }
+
+    string from = "\nFROM ";
+    string name1;
+    if(relations[0].first == false){
+        name1 = relations[0].second;
+    }else{
+        name1 += "(" + relations[0].second + ")" + "AS TMP" + to_string(index++) + "\n";
+    }
+      
+    string res = str1 + names + from + name1;
+    bool isTMPres = true;
+    return make_pair(isTMPres, res);
+}
+
 vector<string> CRename::relevantAtribute(vector<shared_ptr<CRelation>> & relations){
     vector<string> vec;
     for(size_t i = 0; i < m_oldNewNames.size(); i++){

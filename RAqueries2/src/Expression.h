@@ -27,6 +27,7 @@ class CExpression{
 
 		vector<string> m_relevantAtribute;
 		vector<string> findRelevantAtribute();
+		string translateToSQL();
 
 		
 		

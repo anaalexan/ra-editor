@@ -11,6 +11,16 @@ CConditionParser::EOperatorType CConditionParser::stringToEnum(const string & op
     if(op == ">=") return eGreaterOrEqual;
     return eNoMatch;
 }
+string CConditionParser::enumTostring(CConditionParser::EOperatorType & op){
+    if(op == eEqual) return "=";
+    if(op == eNotEqual) return "!=";
+    if(op == eLess) return "<";
+    if(op == eLessOrEqual) return "<=";
+    if(op == eGreater) return ">";
+    if(op == eGreaterOrEqual) return ">=";
+    return " ";
+
+}
 
 
 CConditionParser::CCondition CConditionParser::parse(const string & condition){

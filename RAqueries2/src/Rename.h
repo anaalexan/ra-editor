@@ -11,6 +11,7 @@ class CRename : public COperator{
 		:COperator(EOperatorType::UNARY), m_oldNewNames(){parse(columnNames);};
 
         virtual shared_ptr<CRelation> evaluate(vector<shared_ptr<CRelation>> & relations) override;
+        virtual pair<bool,string> toSQL(vector<pair<bool,string>> & relations, size_t & index) override;
     private:
         vector<pair<string,string>> m_oldNewNames;
 

@@ -5,6 +5,22 @@
 
 using namespace std;
 
+pair<bool,string> CNaturalJoin::toSQL(vector<pair<bool,string>> & relations, size_t & index){
+    string str1 = operatorToString(relations[0], index);
+
+    string str2;
+    string name2;
+    if(relations[1].first == false){
+          str2 = relations[1].second + "\n";
+    }else{
+          str2 = "(" + relations[1].second + ")" + " AS TMP" + to_string(index++) + "\n";;
+    }
+       
+    string res = str1 + "NATURAL JOIN " + str2; 
+    bool isTMPres = true;
+    return make_pair(isTMPres, res);
+}
+
 vector<string> CNaturalJoin::relevantAtribute(vector<shared_ptr<CRelation>> & relations){
     vector<string> vec;
     string common;

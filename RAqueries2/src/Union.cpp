@@ -4,6 +4,15 @@
 
 using namespace std;
 
+
+pair<bool,string> CUnion::toSQL(vector<pair<bool,string>> & relations, size_t & index){
+    string str1 = operatorToString(relations[0], index);
+    string str2 = operatorToString(relations[1], index);
+    string res = str1 + "\nUNION\n" + str2;    
+    bool isTMPres = true;
+    return make_pair(isTMPres, res);
+}
+
 shared_ptr<CRelation> CUnion::evaluateAtributes(vector<shared_ptr<CRelation>> & relations){
 
     shared_ptr<CRelation> sptr1;

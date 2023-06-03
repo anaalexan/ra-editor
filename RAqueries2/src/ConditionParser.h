@@ -26,5 +26,6 @@ class CConditionParser{
         CCondition parse(const string & condition); //TBD tokenizace
 
         CConditionParser::EOperatorType stringToEnum(const string & op);
+        string enumTostring(CConditionParser::EOperatorType & op);
 
 };

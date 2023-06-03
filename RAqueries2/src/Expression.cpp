@@ -23,16 +23,67 @@
 using namespace std;
 
 
+string CExpression::translateToSQL(){
+    vector<pair<bool,string>> stack;
+    size_t index = 0;
+    for(size_t i = 0; i < m_tokens.size(); i++){
+        if(m_tokens[i]->m_type ==  CToken::ETokenType::RELATION){
+            bool isTMPres = false;
+            string path = m_tokens[i]->m_relation->getPath();
+            stack.push_back(make_pair(isTMPres, path));
+        }
+        if(m_tokens[i]->m_type ==  CToken::ETokenType::OPERATOR){
+            vector<pair<bool,string>> relations;
+            if(m_tokens[i]->m_operator->m_type == COperator::EOperatorType::BINARY){
+                relations.push_back(*(stack.end()-2));
+                relations.push_back(*(stack.end()-1));
+                stack.pop_back();
+                stack.pop_back();
+
+            }
+            if(m_tokens[i]->m_operator->m_type == COperator::EOperatorType::UNARY){
+                
+                relations.push_back(*(stack.end()-1));
+                stack.pop_back();
+            }
+            
+            pair<bool,string> res = m_tokens[i]->m_operator->toSQL(relations, index);
+            stack.push_back(res);
+
+            //delete evalueted operator and operand/s
+            if(m_tokens[i]->m_operator->m_type == COperator::EOperatorType::BINARY){
+                m_tokens.pop_back();
+                m_tokens.pop_back();
+                m_tokens.pop_back();
+            }
+            if(m_tokens[i]->m_operator->m_type == COperator::EOperatorType::UNARY){
+                m_tokens.pop_back();
+                m_tokens.pop_back();
+            }
+
+        }
+    }
+    if(m_tokens.size() != 0 || stack.size() != 1){
+        cout << "Error. Cannot translate to SQL. Wrong number of operators or operands." << endl;
+        return nullptr;
+    }else{
+        return stack[0].second;
+    }
+    
+    
+}
+
+
 vector<string> CExpression::findRelevantAtribute(){
     vector<string> vec;
     for(size_t i = 0; i < m_tokens.size(); i++){
         if(m_tokens[i]->m_type ==  CToken::ETokenType::OPERATOR){
-            vector<string> atributes = m_tokens[i]->m_operator->relevantAtribute();
+            /*vector<string> atributes = m_tokens[i]->m_operator->relevantAtribute();
             if(atributes.size() != 0){
                 for(size_t j = 0; j < atributes.size(); j++){
                     vec.push_back(atributes[j]);
                 }
-            }
+            }*/
         }
     }
     return vec;

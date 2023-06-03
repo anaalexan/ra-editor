@@ -8,12 +8,43 @@
 
 using namespace std;
 
+
+
 string CSelection::konstant(string word){
     string newWord;
     for(size_t i = 1; i < word.size()-1; i++){
         newWord.push_back(word[i]);
     }
     return newWord;
+}
+
+pair<bool,string> CSelection::toSQL(vector<pair<bool,string>> & relations, size_t & index){
+    string str1 = "SELECT DISTINCT * \nFROM ";
+    string name1;
+    if(relations[0].first == false){
+          name1 = relations[0].second;
+          str1 += name1 + "\n";
+     }else{
+          name1 = "TMP" + to_string(index++);
+          str1 += "(" + relations[0].second + ")" + " AS " + name1 + "\n";
+     }
+      
+    CConditionParser enumOperator;
+    string conRight;
+    if(m_conditions.right[0] == '\''){
+        if(isdigit(m_conditions.right[1]) != 0){
+            conRight = konstant(m_conditions.right);
+        }else{
+            conRight = m_conditions.right;  
+        }
+    }else{  
+        conRight = name1 + "." + m_conditions.right; 
+    }
+
+    string condition = name1 + "." + m_conditions.left + " " + enumOperator.enumTostring(m_conditions.m_operator) + " " +  conRight;
+    string res = str1 + "WHERE " + condition;
+    bool isTMPres = true;
+    return make_pair(isTMPres, res);
 }
 
 vector<string> CSelection::relevantAtribute(vector<shared_ptr<CRelation>> & relations){

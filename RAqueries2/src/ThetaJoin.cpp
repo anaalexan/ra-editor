@@ -1,11 +1,41 @@
 #include "ThetaJoin.h"
 #include "CompareOperator.h"
 #include "StringConvert.h"
+#include "ConditionParser.h"
 
 #include <iostream>
 #include  <sstream>
 
 using namespace std;
+
+pair<bool,string> CThetaJoin::toSQL(vector<pair<bool,string>> & relations, size_t & index){
+
+    string str1 = "str DISTINCT * \nFROM ";
+    string name1;
+    if(relations[0].first == false){
+          name1 = relations[0].second;
+          str1 += name1 + "\n";
+     }else{
+          name1 = "TMP" + to_string(index++);
+          str1 += "(" + relations[0].second + ")" + " AS " + name1 + "\n";
+     }
+
+    string str2;
+    string name2;
+    if(relations[1].first == false){
+          name2 = relations[1].second;
+          str2 = name2 + "\n";
+     }else{
+          name2 = "TMP" + to_string(index++);
+          str2 = "(" + relations[1].second + ")" + " AS " + name1 + "\n";
+     }
+       
+    CConditionParser enumOperator;
+    string condition = "ON " + name1 + "." + m_conditions.left + " " + enumOperator.enumTostring(m_conditions.m_operator) + " " +  name1 + "." + m_conditions.right;
+    string res = str1 + "INNER JOIN " + str2 + condition; 
+    bool isTMPres = true;
+    return make_pair(isTMPres, res);
+}
 
 vector<string> CThetaJoin::relevantAtribute(vector<shared_ptr<CRelation>> & relations){
      vector<string> vec;

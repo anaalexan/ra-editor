@@ -18,6 +18,9 @@ class CThetaJoin : public COperator{
 
         virtual vector<string> relevantAtribute(vector<shared_ptr<CRelation>> & relations) override;
 
+
+        virtual pair<bool,string> toSQL(vector<pair<bool,string>> & relations, size_t & index) override;
+
         
     private:
         CConditionParser::CCondition m_conditions;
