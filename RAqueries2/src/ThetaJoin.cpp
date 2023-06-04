@@ -47,7 +47,6 @@ shared_ptr<CRelation> CThetaJoin::evaluateAtributes(vector<shared_ptr<CRelation>
      for(size_t j = 0; j < row2.m_values.size(); j++){
           res.m_rows[0].m_values.push_back(row2.m_values[j]);
      }
-
      return make_shared<CRelation>(res); 
 }
 

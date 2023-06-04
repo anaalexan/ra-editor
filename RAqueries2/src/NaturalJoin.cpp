@@ -43,7 +43,8 @@ vector<string> CNaturalJoin::relevantAtribute(vector<shared_ptr<CRelation>> & re
             break;
         }
         if(isHere == false && i == row1.m_values.size() - 1){
-            throw  "No common attribute has been found between the relations. Natural join cannot be evaluate.";
+            string sError = "No common attribute has been found between the relations. Natural join cannot be evaluate.";
+            throw  sError;
         }
     }
     
@@ -74,7 +75,8 @@ shared_ptr<CRelation> CNaturalJoin::evaluateAtributes(vector<shared_ptr<CRelatio
             break;
         }
         if(isHere == false && i == row1.m_values.size() - 1){
-            throw "No common attribute has been found between the relations. Natural join cannot be evaluate.";
+            string sError = "No common attribute has been found between the relations. Natural join cannot be evaluate.";
+            throw sError;
         }
     }
     res.m_rows.push_back(row1);
@@ -88,15 +90,7 @@ shared_ptr<CRelation> CNaturalJoin::evaluateAtributes(vector<shared_ptr<CRelatio
         }
     }
 
-     /*
-     //copy the name of colomns from first relation
-     res.m_rows.push_back(row1);
-     //copy the name of colomns from second relation
-     for(size_t j = 0; j < row2.m_values.size(); j++){
-          res.m_rows[0].m_values.push_back(row2.m_values[j]);
-     }*/
-
-     return make_shared<CRelation>(res); 
+    return make_shared<CRelation>(res); 
 }
 
 shared_ptr<CRelation> CNaturalJoin::evaluate(vector<shared_ptr<CRelation>> & relations){
@@ -122,7 +116,8 @@ shared_ptr<CRelation> CNaturalJoin::evaluate(vector<shared_ptr<CRelation>> & rel
             break;
         }
         if(isHere == false && i == sptr1->m_rows[0].m_values.size() - 1){
-            throw "No common attribute has been found between the relations. Natural join cannot be evaluate.";
+            string sError = "No common attribute has been found between the relations. Natural join cannot be evaluate.";
+            throw sError;
         }
     }
 

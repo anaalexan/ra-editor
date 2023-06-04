@@ -4,9 +4,7 @@ using namespace std;
 
 CMenuKeywords::CMenuKeywords(){
         m_menuText = string("Application keywords (Help)\n"
-            "1 - Return\n" 
-            "TBD\n"
-            "Your selection: ");
+            "For return to main menu write EXIT.\n");
 }
 
 CMenuBase * CMenuKeywords::getNextMenu(int choice, bool & isExitSelected){

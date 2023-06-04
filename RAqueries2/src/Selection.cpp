@@ -18,27 +18,6 @@ string CSelection::konstant(string word){
     return newWord;
 }
 
-/*pair<bool,vector<string>> CRename::toSQL(vector<pair<bool,vector<string>>> & relations, size_t & index){
-    vector<string> newQuery;
-    newQuery.push_back("SELECT DISTINCT ");
-    string names,name1;
-    for( size_t n = 0; n < m_oldNewNames.size(); n++){
-        if(n != 0){
-            names += ", ";
-        }
-        names += m_oldNewNames[n].first + " AS " + m_oldNewNames[n].second ;
-    }
-    string from = "\nFROM ";
-    newQuery.push_back(names);
-    newQuery.push_back(from);
-    if(relations[0].first == false){
-        newQuery.push_back(relations[0].second[0] + "\n");
-    }else{
-        makeTmpSTR(newQuery, relations[0].second, index, name1);
-    }
-    
-    return make_pair(true, newQuery);
-}*/
 
 pair<bool,vector<string>> CSelection::toSQL(vector<pair<bool,vector<string>>> & relations, size_t & index){
     string name1;
@@ -60,7 +39,6 @@ pair<bool,vector<string>> CSelection::toSQL(vector<pair<bool,vector<string>>> & 
 
     string condition = name1 + "." + m_conditions.left + " " + enumOperator.enumTostring(m_conditions.m_operator) + " " +  conRight;
     newQuery[newQuery.size()-1] += condition + "\n";
-    //newQuery.push_back(condition + "\n");
     return make_pair(true, newQuery);
 }
 
@@ -159,9 +137,6 @@ shared_ptr<CRelation> CSelection::evaluate(const string & path){
             if(compare.evaluate(left_con, right_con, m_conditions.m_operator)){
                 res.m_rows.push_back(row);
             }
-            
-            
-
         }
     }
     fin.close();

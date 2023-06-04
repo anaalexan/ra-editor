@@ -3,29 +3,6 @@
 #include <iostream>
 
 using namespace std;
-/*void makeTmpSTR(vector<string> & newQuery, size_t & index, string & name, const vector<string> & oldQuery){
-            newQuery.push_back("\n");
-            newQuery.push_back(tab + "( \n" );
-            for (auto & element : oldQuery){
-                newQuery.push_back(tab + element);
-            }
-            name = "TMP" + to_string(++index);
-            newQuery.push_back(") AS " + name);
-        }
-        
-
-        void operatorToString(vector<string> & newQuery, const pair<bool,vector<string>> & relations, size_t & index, string & name){
-            
-            newQuery.push_back("SELECT DISTINCT *\n");
-            newQuery.push_back("FROM ");
-            if(relations.first == false){
-                name = relations.second[0];
-                newQuery.push_back(name + "\n");
-            }else{
-                makeTmpSTR(newQuery, index, name, relations.second);
-            }
-        }*/
-
 
 pair<bool,vector<string>> CUnion::toSQL(vector<pair<bool,vector<string>>> & relations, size_t & index){
     string name1, name2;
@@ -46,7 +23,8 @@ shared_ptr<CRelation> CUnion::evaluateAtributes(vector<shared_ptr<CRelation>> & 
 
     CUnionCompatible valid;
     if(!valid.isUnionCompatible(row1, row2)){
-        throw "Error. Cannot evaluate Union. Relations are not union compatible. Both relations should have the exact same attributes.";
+        string sError = "Error. Cannot evaluate Union. Relations are not union compatible. Both relations should have the exact same attributes.";
+        throw sError;
     }
     CRelation res;
     res.m_rows.push_back(row1);
@@ -65,7 +43,8 @@ shared_ptr<CRelation> CUnion::evaluate(vector<shared_ptr<CRelation>> & relations
 
     CUnionCompatible valid;
     if(!valid.isUnionCompatible(sptr1->m_rows[0], sptr2->m_rows[0])){
-        throw "Error. Cannot evaluate Union. Relations are not union compatible. Both relations should have the exact same attributes.";
+        string sError = "Error. Cannot evaluate Union. Relations are not union compatible. Both relations should have the exact same attributes.";
+        throw sError;
     }
     
     for(size_t i = 0; i < sptr1->m_rows.size(); i++){

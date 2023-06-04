@@ -21,7 +21,6 @@
 
 
 using namespace std;
-/*pair<bool,vector<string>> CSelection::toSQL(vector<pair<bool,vector<string>>> & relations, size_t & index){*/
 
 vector<string> CExpression::translateToSQL(){
     vector<pair<bool,vector<string>>> stack;
@@ -38,6 +37,10 @@ vector<string> CExpression::translateToSQL(){
         if(m_tokens[i]->m_type ==  CToken::ETokenType::OPERATOR){
             vector<pair<bool,vector<string>>> relations;
             if(m_tokens[i]->m_operator->m_type == COperator::EOperatorType::BINARY){
+                if(stack.size() < 2){
+                    string sError = "Error. Wrong number or format of operators or operands.";
+                    throw sError;
+                }
                 relations.push_back(*(stack.end()-2));
                 relations.push_back(*(stack.end()-1));
                 stack.pop_back();
@@ -45,29 +48,21 @@ vector<string> CExpression::translateToSQL(){
 
             }
             if(m_tokens[i]->m_operator->m_type == COperator::EOperatorType::UNARY){
-                
+                if(stack.size() < 1){
+                    string sError = "Error. Wrong number or format of operators or operands.";
+                    throw sError;
+                }
                 relations.push_back(*(stack.end()-1));
                 stack.pop_back();
             }
             
             pair<bool,vector<string>> res = m_tokens[i]->m_operator->toSQL(relations, index);
             stack.push_back(res);
-
-            //delete evalueted operator and operand/s
-            /*if(m_tokens[i]->m_operator->m_type == COperator::EOperatorType::BINARY){
-                m_tokens.pop_back();
-                m_tokens.pop_back();
-                m_tokens.pop_back();
-            }
-            if(m_tokens[i]->m_operator->m_type == COperator::EOperatorType::UNARY){
-                m_tokens.pop_back();
-                m_tokens.pop_back();
-            }*/
-
         }
     }
     if(stack.size() != 1){
-        throw "Error. Cannot translate to SQL. Wrong number of operators or operands.";
+        string sError = "Error. Cannot translate to SQL. Wrong number of operators or operands.";
+        throw sError;
     }else{
         return stack[0].second;
     }
@@ -170,7 +165,8 @@ void CExpression::tokenize(const string & expression, const vector<CVariable> & 
                     i++;
                 }
                 if(expression[i] != ']'){
-                    throw "Error. Missing closing brasket ']'.";
+                    string sError = "Error. Missing closing brasket ']'.";
+                    throw sError;
                 }
                 CProjection op(columnNames);
                 CToken tok (CToken::ETokenType::OPERATOR, make_shared<CProjection>(op)) ;
@@ -186,7 +182,8 @@ void CExpression::tokenize(const string & expression, const vector<CVariable> & 
                     i++;
                 }
                 if(expression[i] != '>'){
-                    throw "Error. Missing closing brasket '>'.";
+                    string sError = "Error. Missing closing brasket '>'.";
+                    throw sError;
                 }
                 CRename op(columnNames);
                 CToken tok (CToken::ETokenType::OPERATOR, make_shared<CRename>(op)) ;
@@ -211,7 +208,8 @@ void CExpression::tokenize(const string & expression, const vector<CVariable> & 
                     
                 }
                 if(expression[i] != ')' && cnt == 0){
-                    throw "Error. Missing closing brasket ')'.";
+                    string sError = "Error. Missing closing brasket ')'.";
+                    throw sError;
                 }
                 CSelection op(condition);
                 CToken tok (CToken::ETokenType::OPERATOR, make_shared<CSelection>(op)) ;
@@ -243,7 +241,8 @@ void CExpression::tokenize(const string & expression, const vector<CVariable> & 
                     i++;
                 }
                 if(expression[i] != ')' && cnt == 0){
-                    throw "Error. Missing closing brasket ')'.";
+                    string sError = "Error. Missing closing brasket ')'.";
+                    throw sError;
                 }
                 CThetaJoin op(condition);
                 CToken tok (CToken::ETokenType::OPERATOR, make_shared<CThetaJoin>(op)) ;
@@ -266,7 +265,8 @@ void CExpression::tokenize(const string & expression, const vector<CVariable> & 
                     i++;
                 }
                 if(expression[i] != '"'){
-                    throw "Error. Missing closing quotation mark '\"'.";
+                    string sError = "Error. Missing closing quotation mark '\"'.";
+                    throw sError;
                 }
                 CRelation rel(path);
                 CToken tok (CToken::ETokenType::RELATION, make_shared<CRelation>(rel)) ;
@@ -300,7 +300,8 @@ void CExpression::tokenize(const string & expression, const vector<CVariable> & 
                         break;
                     }
                     if(j == variables.size()-1 && isHere == false){
-                        throw "There is no variable with the name: ";
+                        string sError = "There is no variable with the name: " + varName;
+                        throw sError;
                     }
                 }
 
@@ -319,6 +320,10 @@ shared_ptr<CRelation> CExpression::evaluate(){
         if(m_tokens[i]->m_type ==  CToken::ETokenType::OPERATOR){
             vector<shared_ptr<CRelation>> relations;
             if(m_tokens[i]->m_operator->m_type == COperator::EOperatorType::BINARY){
+                if(stack.size() < 2){
+                    string sError = "Error. Wrong number or format of operators or operands.";
+                    throw sError;
+                }
                 relations.push_back(*(stack.end()-2));
                 relations.push_back(*(stack.end()-1));
                 stack.pop_back();
@@ -326,7 +331,10 @@ shared_ptr<CRelation> CExpression::evaluate(){
 
             }
             if(m_tokens[i]->m_operator->m_type == COperator::EOperatorType::UNARY){
-                
+                if(stack.size() < 1){
+                    string sError = "Error. Wrong number or format of operators or operands.";
+                    throw sError;
+                }
                 relations.push_back(*(stack.end()-1));
                 stack.pop_back();
             }
@@ -335,22 +343,11 @@ shared_ptr<CRelation> CExpression::evaluate(){
             res = m_tokens[i]->m_operator->evaluate(relations);
             stack.push_back(res);
 
-           /* //delete evalueted operator and operand/s
-            if(m_tokens[i]->m_operator->m_type == COperator::EOperatorType::BINARY){
-                m_tokens.pop_back();
-                m_tokens.pop_back();
-                m_tokens.pop_back();
-            }
-            if(m_tokens[i]->m_operator->m_type == COperator::EOperatorType::UNARY){
-                m_tokens.pop_back();
-                m_tokens.pop_back();
-            }*/
-
-
         }
     }
-    if(/*m_tokens.size() != 0 || */stack.size() != 1){
-        throw "Error. Wrong number of operators or operands.";
+    if(stack.size() != 1){
+        string sError = "Error. Wrong number of operators or operands.";
+        throw sError;
     }else{
         return stack[0];
     }

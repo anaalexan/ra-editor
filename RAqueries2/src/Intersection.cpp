@@ -24,7 +24,8 @@ shared_ptr<CRelation> CIntersection::evaluateAtributes(vector<shared_ptr<CRelati
 
     CUnionCompatible valid;
     if(!valid.isUnionCompatible(row1, row2)){
-        throw "Error. Cannot evaluate Intersection. Relations are not union compatible. Both relations should have the exact same attributes.";
+        string sError = "Error. Cannot evaluate Intersection. Relations are not union compatible. Both relations should have the exact same attributes.";
+        throw sError;
     }
     CRelation res;
     res.m_rows.push_back(row1);
@@ -40,7 +41,8 @@ shared_ptr<CRelation> CIntersection::evaluate(vector<shared_ptr<CRelation>> & re
 
     CUnionCompatible valid;
     if(!valid.isUnionCompatible(sptr1->m_rows[0], sptr2->m_rows[0])){
-        throw "Error. Cannot evaluate Intersection. Relations are not union compatible. Both relations should have the exact same attributes.";
+        string sError = "Error. Cannot evaluate Intersection. Relations are not union compatible. Both relations should have the exact same attributes.";
+        throw sError;
     }
 
     CRelation res;
@@ -74,10 +76,7 @@ shared_ptr<CRelation> CIntersection::evaluate(vector<shared_ptr<CRelation>> & re
             }
             if(same == true){
                 res.m_rows.push_back(sptr1->m_rows[row1]);
-            }
-                
-
-            
+            }  
         }
     }
     

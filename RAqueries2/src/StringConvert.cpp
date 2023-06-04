@@ -53,14 +53,4 @@ CStringConvert::m_variant CStringConvert::whatType(string str){
     }else{
         return str;         
     }
-
 }
-
-/*void CStringConvert::remove_invisible (string & str)
-{
-    str.erase(std::remove_if(str.begin(),
-    str.end(),
-    [](char c) {
-        return !(isstrChar(c) || '-' == c || '\'' == c);
-    }), str.end());
-}*/

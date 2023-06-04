@@ -13,8 +13,18 @@ void CApplication::run(){
 
         int choice;
         choice = aCurrentMenu->execute();
+        CMenuBase * aNewMenuPointer;
+        try
+            {
+               aNewMenuPointer = aCurrentMenu->getNextMenu(choice, isExitSelected); 
+            }
+            catch(string sError)
+            {
+                cerr << sError << endl;
+            }
+        
 
-        CMenuBase * aNewMenuPointer = aCurrentMenu->getNextMenu(choice, isExitSelected);
+        
 
         if (aNewMenuPointer)
         {
