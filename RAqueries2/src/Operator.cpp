@@ -49,14 +49,14 @@ void COperator::makeTmpSTR(vector<string> & newQuery, pair<bool,vector<string>> 
 }
         
 
-void COperator::operatorToString(vector<string> & newQuery, pair<bool,vector<string>> & relations, size_t & index, string & name){
+void COperator::operatorToString(vector<string> & newQuery, pair<bool,vector<string>> & oldQuery, size_t & index, string & name){
             
     newQuery.push_back("SELECT DISTINCT *\n");
     newQuery.push_back("FROM ");
-    if(relations.first == false){
-        name = relations.second[0];
+    if(oldQuery.first == false){
+        name = oldQuery.second[0];
         newQuery[newQuery.size()-1] += name + "\n";
     }else{
-        makeTmpSTR(newQuery, relations, index, name);
+        makeTmpSTR(newQuery, oldQuery, index, name);
     }
 }

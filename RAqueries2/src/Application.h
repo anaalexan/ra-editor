@@ -3,10 +3,12 @@
 #include "MainMenu.h"
 
 using namespace std;
-
+/** Class for run the whole application  */
 class CApplication{ 
-    public:
+    public: 
+
+        /**
+        * Method runs the whole application*/
         void run();
-    private:
 
 };
