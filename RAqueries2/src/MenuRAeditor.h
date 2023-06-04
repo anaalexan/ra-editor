@@ -38,7 +38,7 @@ class CMenuRAeditor : public CMenuBase{
 	 * @param[in] word string with keyword from input from user with request to process
      * @returns {@link #EKeywords} enum with keyword to process
 	 */
-        EKeywords stringToEnum(const string & word);
+        //EKeywords stringToEnum(const string & word);
 
         /**
 	 * Method modify input string from user with keyword into enum

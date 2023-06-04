@@ -1,3 +1,5 @@
+#pragma once
+
 #include "ConditionParser.h"
 #include "StringConvert.h"
 

@@ -38,6 +38,10 @@ CRow CFileService::importAtriburesFromFile(const shared_ptr<CRelation> & data){
     }
     
     getline(fin, line);
+    if(line.size() == 0){
+        string sError = "Error. Empty file.";
+        throw sError;
+    }
     size_t i = 0;
     stringstream ss(line);
     while (getline(ss, word, ',')){
@@ -56,9 +60,13 @@ bool CFileService::importFromFile(const shared_ptr<CRelation> & data){
         string sError = "Error. Cannot open file: " + data->getPath();
         throw  sError;
     }
-    
+    size_t i = 0;
     while(getline(fin, line)){
-        size_t i = 0;
+        
+        if(line.size() == 0 && i == 0){
+            string sError = "Error. Empty file.";
+            throw sError;
+        }
         stringstream ss(line);
         CRow row;
         while (getline(ss, word, ',')){
@@ -66,16 +74,8 @@ bool CFileService::importFromFile(const shared_ptr<CRelation> & data){
 
         }
         data->m_rows.push_back(row);
+        i++;
     }
-
-    
-
-    /*for (const auto & element : data->m_rows){
-        
-        for (const auto & element2 : element.m_values){
-            cout << element2 << endl;
-        }
-    }*/
 
     fin.close();
     return true;

@@ -13,15 +13,15 @@ class CCrossJoin : public COperator{
          * {@inheritDoc}
          * @param[in] relations vector contains 2 shared pointer of {@link #CRelation} class.
         */
-        virtual shared_ptr<CRelation> evaluate(vector<shared_ptr<CRelation>> & relations) override;
+        virtual shared_ptr<CRelation> evaluate(const vector<shared_ptr<CRelation>> & relations) override;
         /** 
          * {@inheritDoc}
          * @param[in] relations vector contains 2 shared pointer of {@link #CRelation} class.
         */
-        virtual shared_ptr<CRelation> evaluateAtributes(vector<shared_ptr<CRelation>> & relations) override;
+        virtual shared_ptr<CRelation> evaluateAtributes(const vector<shared_ptr<CRelation>> & relations) override;
         /** 
          * {@inheritDoc}
          * @param[in] relations vector contains 2 shared pointer of {@link #CRelation} class.
         */
-        virtual pair<bool,vector<string>> toSQL(vector<pair<bool,vector<string>>> & relations, size_t & index) override;
+        virtual pair<bool,vector<string>> toSQL(const vector<pair<bool,vector<string>>> & relations, size_t & index) override;
 };

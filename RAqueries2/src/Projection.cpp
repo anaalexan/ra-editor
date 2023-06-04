@@ -92,6 +92,10 @@ shared_ptr<CRelation> CProjection::evaluate(const string & path){
     }
     
     getline(fin, line);
+    if(line.size() == 0){
+        string sError = "Error. Empty file.";
+        throw sError;
+    }
     bool isHere = false;
     vector<size_t> indexes;
     CRow rowName;

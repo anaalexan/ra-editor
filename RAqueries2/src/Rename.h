@@ -14,22 +14,22 @@ class CRename : public COperator{
          * {@inheritDoc}
          * @param[in] relations vector contains 1 shared pointer of {@link #CRelation} class.
         */
-        virtual shared_ptr<CRelation> evaluate(vector<shared_ptr<CRelation>> & relations) override;
+        virtual shared_ptr<CRelation> evaluate(const vector<shared_ptr<CRelation>> & relations) override;
         /** 
          * {@inheritDoc}
          * @param[in] relations vector contains 1 shared pointer of {@link #CRelation} class.
         */
-        virtual pair<bool,vector<string>> toSQL(vector<pair<bool,vector<string>>> & relations, size_t & index) override;
+        virtual pair<bool,vector<string>> toSQL(const vector<pair<bool,vector<string>>> & relations, size_t & index) override;
         /** 
          * {@inheritDoc}
          * @param[in] relations vector contains 1 shared pointer of {@link #CRelation} class.
         */
-        virtual shared_ptr<CRelation> evaluateAtributes(vector<shared_ptr<CRelation>> & relations) override;
+        virtual shared_ptr<CRelation> evaluateAtributes(const vector<shared_ptr<CRelation>> & relations) override;
         /** 
          * {@inheritDoc}
          * returs all the atributes to rename (old and new ones)
         */
-        virtual vector<string> relevantAtribute(vector<shared_ptr<CRelation>> & relations) override;
+        virtual vector<string> relevantAtribute(const vector<shared_ptr<CRelation>> & relations) override;
     private:
         /** @var vector of pairs strings, first is old name to rename, second is new name to rename to */
         vector<pair<string,string>> m_oldNewNames;

@@ -73,6 +73,10 @@ shared_ptr<CRelation> CSelection::evaluate(const string & path){
     }
     
     getline(fin, line);
+    if(line.size() == 0){
+        string sError = "Error. Empty file.";
+        throw sError;
+    }
     CRow row;
     stringstream ss(line);
     while (getline(ss, word, ',')){

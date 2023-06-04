@@ -1,7 +1,9 @@
+#pragma once
+
 #include <string>
 #include <variant>
 
-#pragma once
+
 
 using namespace std;
 

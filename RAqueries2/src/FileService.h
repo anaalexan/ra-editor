@@ -19,13 +19,13 @@ class CFileService{
 	 * @param[in] data shared pointer of {@link #CRelation} class contains path to import data
      * @returns true in case method succeeded to import, false otherwise
 	 */
-        bool importFromFile(const shared_ptr<CRelation> data);
+        bool importFromFile(const shared_ptr<CRelation> & data);
 
         /**
 	 * Method for import only atributes of the relation to evaluate expression in RA
 	 * @param[in] data shared pointer of {@link #CRelation} class contains path to import data
      * @returns true in case method succeeded to import, false otherwise
 	 */
-        CRow importAtriburesFromFile(const shared_ptr<CRelation> data);
+        CRow importAtriburesFromFile(const shared_ptr<CRelation> & data);
 
 };

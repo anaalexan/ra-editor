@@ -9,7 +9,6 @@ void CApplication::run(){
     CMenuBase * aCurrentMenu = new CMainMenu;
     bool isExitSelected = false;
     while (!isExitSelected){
-        //aCurrentMenu->printText(); // potom zbytecny
 
         int choice;
         choice = aCurrentMenu->execute();

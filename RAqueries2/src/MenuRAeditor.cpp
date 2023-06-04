@@ -6,17 +6,6 @@
 #include <string>
 #include <cstring>
 #include <algorithm>
-#include "CrossJoin.h"
-#include "Difference.h"
-#include "Intersection.h"
-#include "Union.h"
-#include "Rename.h"
-#include "Projection.h"
-#include "NaturalJoin.h"
-#include "Selection.h"
-#include "ThetaJoin.h"
-
-
 
 #include "Expression.h"
 #include "Variable.h"
@@ -56,7 +45,7 @@ string CMenuRAeditor::noQuots(string word){
     return newWord;
 }
 
-EKeywords CMenuRAeditor::stringToEnum(const string & word){
+/*EKeywords CMenuRAeditor::stringToEnum(const string & word){
     if(word == "EXIT"){
         return EKeywords::eEXIT;
     }
@@ -73,21 +62,21 @@ EKeywords CMenuRAeditor::stringToEnum(const string & word){
         return EKeywords::eTRANSLATE;
     }
     return EKeywords::eNoMatch;
-}
+}*/
 
-string toUpperCase(string input){
+/*string toUpperCase(string input){
     for(auto i = input.begin(); i < input.end(); i++){
         std::transform(input.begin(), input.end(), input.begin(), ::toupper);
     }
     return input;
-}
+}*/
 
 int CMenuRAeditor::execute(){
     printText();
     
     bool exit = false;
-
-    
+    string line;
+    getline(cin, line);
 
     while(exit != true){
 
@@ -175,7 +164,8 @@ int CMenuRAeditor::execute(){
                 }
                 default:{
                     if(line.size() == 0){
-                        break;
+                        string sError = "Invalid command.";
+                        throw  sError;
                     }
                     string exp;
                     size_t i = 0;
