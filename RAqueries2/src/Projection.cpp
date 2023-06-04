@@ -15,7 +15,7 @@ void CProjection::parse(const string & columnNames){
     }
 }
 
-pair<bool,vector<string>> CProjection::toSQL(vector<pair<bool,vector<string>>> & relations, size_t & index){
+pair<bool,vector<string>> CProjection::toSQL(const vector<pair<bool,vector<string>>> & relations, size_t & index){
     string names, name1;
     vector<string> newQuery;
     newQuery.push_back("SELECT DISTINCT ");
@@ -40,7 +40,7 @@ pair<bool,vector<string>> CProjection::toSQL(vector<pair<bool,vector<string>>> &
     return make_pair(true, newQuery);
 }
 
-vector<string> CProjection::relevantAtribute(vector<shared_ptr<CRelation>> & relations){
+vector<string> CProjection::relevantAtribute(const vector<shared_ptr<CRelation>> & relations){
     vector<string> vec;
     for(size_t i = 0; i < m_columnNames.size(); i++){
         vec.push_back(m_columnNames[i]);
@@ -48,7 +48,7 @@ vector<string> CProjection::relevantAtribute(vector<shared_ptr<CRelation>> & rel
     return vec;
 }
 
-shared_ptr<CRelation> CProjection::evaluateAtributes(vector<shared_ptr<CRelation>> & relations){
+shared_ptr<CRelation> CProjection::evaluateAtributes(const vector<shared_ptr<CRelation>> & relations){
 
     shared_ptr<CRelation> sptr1;
 
@@ -82,10 +82,6 @@ shared_ptr<CRelation> CProjection::evaluateAtributes(vector<shared_ptr<CRelation
 }
 
 shared_ptr<CRelation> CProjection::evaluate(const string & path){
-    /*shared_ptr<CRelation> sptr1;
-    CFileService file;
-    sptr1 = make_shared<CRelation>(path);
-    file.importFromFile(sptr1);*/
     ifstream fin(path);
     string line, word;
     CRelation res;
@@ -208,7 +204,7 @@ shared_ptr<CRelation> CProjection::evaluate(const string & path){
 }
 
 
-shared_ptr<CRelation> CProjection::evaluate(vector<shared_ptr<CRelation>> & relations){
+shared_ptr<CRelation> CProjection::evaluate(const vector<shared_ptr<CRelation>> & relations){
     
     if(relations[0]->getPath().size() != 0){
 

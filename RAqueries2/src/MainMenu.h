@@ -9,9 +9,14 @@
 #include "MenuKeywords.h"
 
 using namespace std;
-
+/** Dervied class for main menu. First menu to display to user afrer run the aplication
+ * Contains signpost to all function of this aplication
+  */
 class CMainMenu : public CMenuBase{
     public: 
         CMainMenu();
-        virtual CMenuBase *getNextMenu(int choice, bool& isExitSelected) override;
+        /** 
+         * {@inheritDoc}
+        */
+        virtual CMenuBase *getNextMenu(int choice, bool & isExitSelected) override;
 };

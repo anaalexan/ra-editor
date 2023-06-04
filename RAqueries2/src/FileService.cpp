@@ -27,7 +27,7 @@ bool CFileService::exportToFile(shared_ptr<CRelation> data) {
 
 }
 
-CRow CFileService::importAtriburesFromFile(const shared_ptr<CRelation> data){
+CRow CFileService::importAtriburesFromFile(const shared_ptr<CRelation> & data){
     ifstream fin(data->getPath());
     string line, word;
     CRow row;
@@ -48,7 +48,7 @@ CRow CFileService::importAtriburesFromFile(const shared_ptr<CRelation> data){
     return row;
 }
 
-bool CFileService::importFromFile(const shared_ptr<CRelation> data){
+bool CFileService::importFromFile(const shared_ptr<CRelation> & data){
     ifstream fin(data->getPath());
     string line, word;
 

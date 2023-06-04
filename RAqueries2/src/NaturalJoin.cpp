@@ -6,7 +6,7 @@
 using namespace std;
 
 
-pair<bool,vector<string>> CNaturalJoin::toSQL(vector<pair<bool,vector<string>>> & relations, size_t & index){
+pair<bool,vector<string>> CNaturalJoin::toSQL(const vector<pair<bool,vector<string>>> & relations, size_t & index){
     string name1, name2;
     vector<string> newQuery;
     operatorToString(newQuery, relations[0], index, name1);
@@ -20,7 +20,7 @@ pair<bool,vector<string>> CNaturalJoin::toSQL(vector<pair<bool,vector<string>>> 
     return make_pair(true, newQuery);
 }
 
-vector<string> CNaturalJoin::relevantAtribute(vector<shared_ptr<CRelation>> & relations){
+vector<string> CNaturalJoin::relevantAtribute(const vector<shared_ptr<CRelation>> & relations){
     vector<string> vec;
     string common;
     CRow row1;
@@ -51,7 +51,7 @@ vector<string> CNaturalJoin::relevantAtribute(vector<shared_ptr<CRelation>> & re
     vec.push_back(common);
     return vec;
 }
-shared_ptr<CRelation> CNaturalJoin::evaluateAtributes(vector<shared_ptr<CRelation>> & relations){
+shared_ptr<CRelation> CNaturalJoin::evaluateAtributes(const vector<shared_ptr<CRelation>> & relations){
 
     shared_ptr<CRelation> sptr1;
     CRow row1;
@@ -93,7 +93,7 @@ shared_ptr<CRelation> CNaturalJoin::evaluateAtributes(vector<shared_ptr<CRelatio
     return make_shared<CRelation>(res); 
 }
 
-shared_ptr<CRelation> CNaturalJoin::evaluate(vector<shared_ptr<CRelation>> & relations){
+shared_ptr<CRelation> CNaturalJoin::evaluate(const vector<shared_ptr<CRelation>> & relations){
     shared_ptr<CRelation> sptr1 = importRelation(relations[0]);
     shared_ptr<CRelation> sptr2 = importRelation(relations[1]);
     

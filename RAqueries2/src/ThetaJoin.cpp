@@ -9,7 +9,7 @@
 using namespace std;
 
 
-pair<bool,vector<string>> CThetaJoin::toSQL(vector<pair<bool,vector<string>>> & relations, size_t & index){
+pair<bool,vector<string>> CThetaJoin::toSQL(const vector<pair<bool,vector<string>>> & relations, size_t & index){
 
     string name1, name2;
     vector<string> newQuery;
@@ -24,7 +24,7 @@ pair<bool,vector<string>> CThetaJoin::toSQL(vector<pair<bool,vector<string>>> & 
     return make_pair(true, newQuery);
 }
 
-vector<string> CThetaJoin::relevantAtribute(vector<shared_ptr<CRelation>> & relations){
+vector<string> CThetaJoin::relevantAtribute(const vector<shared_ptr<CRelation>> & relations){
      vector<string> vec;
      vec.push_back(m_conditions.left);
      vec.push_back(m_conditions.right);
@@ -32,7 +32,7 @@ vector<string> CThetaJoin::relevantAtribute(vector<shared_ptr<CRelation>> & rela
 }
 
 
-shared_ptr<CRelation> CThetaJoin::evaluateAtributes(vector<shared_ptr<CRelation>> & relations){
+shared_ptr<CRelation> CThetaJoin::evaluateAtributes(const vector<shared_ptr<CRelation>> & relations){
 
      shared_ptr<CRelation> sptr1;
      CRow row1;
@@ -52,7 +52,7 @@ shared_ptr<CRelation> CThetaJoin::evaluateAtributes(vector<shared_ptr<CRelation>
 
         
 
-shared_ptr<CRelation> CThetaJoin::evaluate(vector<shared_ptr<CRelation>> & relations){
+shared_ptr<CRelation> CThetaJoin::evaluate(const vector<shared_ptr<CRelation>> & relations){
      shared_ptr<CRelation> sptr1 = importRelation(relations[0]);
      shared_ptr<CRelation> sptr2 = importRelation(relations[1]);
      CRelation res;

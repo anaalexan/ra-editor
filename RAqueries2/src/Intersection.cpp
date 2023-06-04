@@ -5,7 +5,7 @@
 using namespace std;
 
 
-pair<bool,vector<string>> CIntersection::toSQL(vector<pair<bool,vector<string>>> & relations, size_t & index){
+pair<bool,vector<string>> CIntersection::toSQL(const vector<pair<bool,vector<string>>> & relations, size_t & index){
     string name1, name2;
     vector<string> newQuery;
     operatorToString(newQuery, relations[0], index, name1);
@@ -14,7 +14,7 @@ pair<bool,vector<string>> CIntersection::toSQL(vector<pair<bool,vector<string>>>
     return make_pair(true, newQuery);
 }
 
-shared_ptr<CRelation> CIntersection::evaluateAtributes(vector<shared_ptr<CRelation>> & relations){
+shared_ptr<CRelation> CIntersection::evaluateAtributes(const vector<shared_ptr<CRelation>> & relations){
 
     shared_ptr<CRelation> sptr1;
     CRow row1;
@@ -35,7 +35,7 @@ shared_ptr<CRelation> CIntersection::evaluateAtributes(vector<shared_ptr<CRelati
 }
 
 
-shared_ptr<CRelation> CIntersection::evaluate(vector<shared_ptr<CRelation>> & relations){
+shared_ptr<CRelation> CIntersection::evaluate(const vector<shared_ptr<CRelation>> & relations){
     shared_ptr<CRelation> sptr1 = importRelation(relations[0]);
     shared_ptr<CRelation> sptr2 = importRelation(relations[1]);
 

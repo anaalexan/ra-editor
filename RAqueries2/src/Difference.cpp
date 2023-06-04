@@ -6,7 +6,7 @@
 using namespace std;
 
 
-pair<bool,vector<string>> CDifference::toSQL(vector<pair<bool,vector<string>>> & relations, size_t & index){
+pair<bool,vector<string>> CDifference::toSQL(const vector<pair<bool,vector<string>>> & relations, size_t & index){
     string name1, name2;
     vector<string> newQuery;
     operatorToString(newQuery, relations[0], index, name1);
@@ -15,7 +15,7 @@ pair<bool,vector<string>> CDifference::toSQL(vector<pair<bool,vector<string>>> &
     return make_pair(true, newQuery);
 }
 
-shared_ptr<CRelation> CDifference::evaluateAtributes(vector<shared_ptr<CRelation>> & relations){
+shared_ptr<CRelation> CDifference::evaluateAtributes(const vector<shared_ptr<CRelation>> & relations){
 
     shared_ptr<CRelation> sptr1;
     CRow row1;
@@ -35,7 +35,7 @@ shared_ptr<CRelation> CDifference::evaluateAtributes(vector<shared_ptr<CRelation
     return make_shared<CRelation>(res); 
 }
 
-shared_ptr<CRelation> CDifference::evaluate(vector<shared_ptr<CRelation>> & relations) {
+shared_ptr<CRelation> CDifference::evaluate(const vector<shared_ptr<CRelation>> & relations) {
     shared_ptr<CRelation> sptr1 = importRelation(relations[0]);
     shared_ptr<CRelation> sptr2 = importRelation(relations[1]);
     

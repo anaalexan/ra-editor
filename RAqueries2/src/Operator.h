@@ -18,17 +18,17 @@ class COperator{
 
         /**
 	 * Method evaluate expression for 1 or 2(binary operator) operand/s
-	 * @param[in] relations vector contins 1 or 2 shared pointers of {@link #CRelation) class.
+	 * @param[in] relations vector contins 1 or 2 shared pointers of {@link #CRelation} class.
      * @returns shared pointer of {@link #CRelation} class with the result of evaluation
 	 */
-        virtual shared_ptr<CRelation> evaluate(vector<shared_ptr<CRelation>> relations) = 0;
+        virtual shared_ptr<CRelation> evaluate(const vector<shared_ptr<CRelation>> & relations) = 0;
 
         /**
 	 * Method evaluate expression for 1 or 2(binary operator) operand/s only on atributes of relation/s
 	 * @param[in] relations vector contins 1 or 2 shared pointers of {@link #CRelation} class.
      * @returns shared pointer of {@link #CRelation) class with the attribute result of evaluation
 	 */
-        virtual shared_ptr<CRelation> evaluateAtributes(vector<shared_ptr<CRelation>> & relations) = 0;
+        virtual shared_ptr<CRelation> evaluateAtributes(const vector<shared_ptr<CRelation>> & relations) = 0;
 
 
         /**
@@ -38,14 +38,14 @@ class COperator{
      *  @param[in,out] index sequence number of intermidiate relults 
      * @returns pair of bool(intermediate result(true)) and vector of strings contains rows with the expression in SQL
 	 */
-        virtual pair<bool,vector<string>> toSQL(vector<pair<bool,vector<string>>> & relations, size_t & index) = 0;
+        virtual pair<bool,vector<string>> toSQL(const vector<pair<bool,vector<string>>> & relations, size_t & index) = 0;
 
         /**
 	 * Method returns relevant atribute for the specific operator
 	 * @param[in] relations vector contins 1 or 2 shared pointers of {@link #CRelation} class.
      * @returns vector of strings contains relevant atribute for the specific operator
 	 */
-        virtual vector<string> relevantAtribute(vector<shared_ptr<CRelation>> & relations);
+        virtual vector<string> relevantAtribute(const vector<shared_ptr<CRelation>> & relations);
 
          /**
 	 * Method checks if specific relation has a path(so its a empty relation and it has need to import data from the path) or 
@@ -53,7 +53,7 @@ class COperator{
 	 * @param[in] relation shared pointer of {@link #CRelation} class.
      * @returns  shared pointer of {@link #CRelation} class with the same relation or with new uploaded data from the path
 	 */
-        shared_ptr<CRelation> importRelation(shared_ptr<CRelation> relation);
+        shared_ptr<CRelation> importRelation(const shared_ptr<CRelation> & relation);
 
     /**
 	 * Method checks if specific relation has a path(so its a empty relation and it has need to import data from the path) or 
@@ -61,7 +61,7 @@ class COperator{
 	 * @param[in] relations shared pointer of {@link #CRelation) class.
      * @returns  shared pointer of {@link #CRow} class with the row from same relation or with new uploaded data from the path
 	 */
-        CRow importAtributes(shared_ptr<CRelation> relation);
+        CRow importAtributes(const shared_ptr<CRelation> & relation);
 
     protected:  
         /**
@@ -73,7 +73,7 @@ class COperator{
      * @param[in,out] index sequence number of intermidiate relults 
      * @param[in,out] name the name of a new intermediate result
 	 */
-        void makeTmpSTR(vector<string> & newQuery, pair<bool,vector<string>> & oldQuery, size_t & index, string & name);
+        void makeTmpSTR(vector<string> & newQuery, const pair<bool,vector<string>> & oldQuery, size_t & index, string & name);
         
     /**
 	 * Method create a vector of row newQuery with partial expression in SQL
@@ -85,7 +85,7 @@ class COperator{
      * @param[in,out] index sequence number of intermidiate relults 
      * @param[in,out] name the name of existed relation or new intermediate result
 	 */
-        void operatorToString(vector<string> & newQuery, pair<bool,vector<string>> & oldQuery, size_t & index, string & name);
+        void operatorToString(vector<string> & newQuery, const pair<bool,vector<string>> & oldQuery, size_t & index, string & name);
         
         
 };

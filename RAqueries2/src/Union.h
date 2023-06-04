@@ -14,17 +14,17 @@ class CUnion : public COperator, public CUnionCompatible{
 
         /** 
          * {@inheritDoc}
-         * @param[in] relations vector contins 2 shared pointers of {@link #CRelation) class.
+         * @param[in] relations vector contains 2 shared pointers of {@link #CRelation} class.
         */
         virtual shared_ptr<CRelation> evaluate(vector<shared_ptr<CRelation>> & relations) override;
         /** 
          * {@inheritDoc}
-         * @param[in] relations vector contins 2 shared pointers of {@link #CRelation) class. 
+         * @param[in] relations vector contains 2 shared pointers of {@link #CRelation} class. 
         */
         virtual shared_ptr<CRelation> evaluateAtributes(vector<shared_ptr<CRelation>> & relations) override;
         /** 
          * * {@inheritDoc}
-         * @param[in] relations vector contins 2 pair of bool and vector of strings
+         * @param[in] relations vector contains 2 pair of bool and vector of strings
         */
         virtual pair<bool,vector<string>> toSQL(vector<pair<bool,vector<string>>> & relations, size_t & index) override;
         

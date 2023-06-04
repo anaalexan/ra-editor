@@ -82,25 +82,6 @@ string toUpperCase(string input){
     return input;
 }
 
-
-/*
-import kart1 "/home/progtest/Downloads/kart1.csv"
-import kart2 "/home/progtest/Downloads/kart2.csv"
-res = kart1 kart2 x
-export res > /home/progtest/Downloads/resKartnew.csv
-print res
-
-translate "/home/progtest/Downloads/kart1.csv" "/home/progtest/Downloads/kart2.csv" *
-
-import LOD "lod.csv"
-import REZERVACE "REZERVACE.csv"
-
-translate "LOD" "REZERVACE" * "ZAKAZNIK" * (JMENO_Z=='1000') [JMENO_L]<JMENO_L,NAZEV_LOD> "IasonShips.csv" +
-
-
-
-*/
-
 int CMenuRAeditor::execute(){
     printText();
     

@@ -19,7 +19,7 @@ string CSelection::konstant(string word){
 }
 
 
-pair<bool,vector<string>> CSelection::toSQL(vector<pair<bool,vector<string>>> & relations, size_t & index){
+pair<bool,vector<string>> CSelection::toSQL(const vector<pair<bool,vector<string>>> & relations, size_t & index){
     string name1;
     vector<string> newQuery;
     operatorToString(newQuery, relations[0], index, name1);
@@ -42,7 +42,7 @@ pair<bool,vector<string>> CSelection::toSQL(vector<pair<bool,vector<string>>> & 
     return make_pair(true, newQuery);
 }
 
-vector<string> CSelection::relevantAtribute(vector<shared_ptr<CRelation>> & relations){
+vector<string> CSelection::relevantAtribute(const vector<shared_ptr<CRelation>> & relations){
     vector<string> vec;
     vec.push_back(m_conditions.left);
     if(m_conditions.right[0] != '\''){
@@ -51,7 +51,7 @@ vector<string> CSelection::relevantAtribute(vector<shared_ptr<CRelation>> & rela
     return vec;
 }
 
-shared_ptr<CRelation> CSelection::evaluateAtributes(vector<shared_ptr<CRelation>> & relations){
+shared_ptr<CRelation> CSelection::evaluateAtributes(const vector<shared_ptr<CRelation>> & relations){
 
     shared_ptr<CRelation> sptr1;
 
@@ -144,7 +144,7 @@ shared_ptr<CRelation> CSelection::evaluate(const string & path){
 
 }
 
-shared_ptr<CRelation> CSelection::evaluate(vector<shared_ptr<CRelation>> & relations){
+shared_ptr<CRelation> CSelection::evaluate(const vector<shared_ptr<CRelation>> & relations){
     if(relations[0]->getPath().size() != 0){
 
         return evaluate(relations[0]->getPath());

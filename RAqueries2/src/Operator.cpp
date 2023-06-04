@@ -2,12 +2,12 @@
 
 string tab = "    ";
 
-vector<string> COperator::relevantAtribute(vector<shared_ptr<CRelation>> & relations){
+vector<string> COperator::relevantAtribute(const vector<shared_ptr<CRelation>> & relations){
     vector<string> vec;
     return vec;
 }
 
-shared_ptr<CRelation> COperator::importRelation(shared_ptr<CRelation> relation){
+shared_ptr<CRelation> COperator::importRelation(const shared_ptr<CRelation> & relation){
 
     shared_ptr<CRelation> sptr1;
     
@@ -21,7 +21,7 @@ shared_ptr<CRelation> COperator::importRelation(shared_ptr<CRelation> relation){
     return sptr1;
 }
 
-CRow COperator::importAtributes(shared_ptr<CRelation> relation){
+CRow COperator::importAtributes(const shared_ptr<CRelation> & relation){
 
     CRow row;
     shared_ptr<CRelation> sptr1;
@@ -37,7 +37,7 @@ CRow COperator::importAtributes(shared_ptr<CRelation> relation){
 
         
 
-void COperator::makeTmpSTR(vector<string> & newQuery, pair<bool,vector<string>> & oldQuery, size_t & index, string & name){
+void COperator::makeTmpSTR(vector<string> & newQuery, const pair<bool,vector<string>> & oldQuery, size_t & index, string & name){
     newQuery.push_back("\n");
     newQuery.push_back("( \n" );
 
@@ -49,7 +49,7 @@ void COperator::makeTmpSTR(vector<string> & newQuery, pair<bool,vector<string>> 
 }
         
 
-void COperator::operatorToString(vector<string> & newQuery, pair<bool,vector<string>> & oldQuery, size_t & index, string & name){
+void COperator::operatorToString(vector<string> & newQuery, const pair<bool,vector<string>> & oldQuery, size_t & index, string & name){
             
     newQuery.push_back("SELECT DISTINCT *\n");
     newQuery.push_back("FROM ");

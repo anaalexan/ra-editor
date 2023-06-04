@@ -18,7 +18,7 @@ void CRename::parse(const string & columnNames){
     }
 
 }
-pair<bool,vector<string>> CRename::toSQL(vector<pair<bool,vector<string>>> & relations, size_t & index){
+pair<bool,vector<string>> CRename::toSQL(const vector<pair<bool,vector<string>>> & relations, size_t & index){
     vector<string> newQuery;
     newQuery.push_back("SELECT DISTINCT ");
     string names,name1;
@@ -43,7 +43,7 @@ pair<bool,vector<string>> CRename::toSQL(vector<pair<bool,vector<string>>> & rel
     return make_pair(true, newQuery);
 }
 
-vector<string> CRename::relevantAtribute(vector<shared_ptr<CRelation>> & relations){
+vector<string> CRename::relevantAtribute(const vector<shared_ptr<CRelation>> & relations){
     vector<string> vec;
     for(size_t i = 0; i < m_oldNewNames.size(); i++){
         vec.push_back(m_oldNewNames[i].first);
@@ -51,7 +51,7 @@ vector<string> CRename::relevantAtribute(vector<shared_ptr<CRelation>> & relatio
     return vec;
 }
 
-shared_ptr<CRelation> CRename::evaluateAtributes(vector<shared_ptr<CRelation>> & relations){
+shared_ptr<CRelation> CRename::evaluateAtributes(const vector<shared_ptr<CRelation>> & relations){
 
     shared_ptr<CRelation> sptr1;
     CRow row1;
@@ -95,7 +95,7 @@ shared_ptr<CRelation> CRename::evaluateAtributes(vector<shared_ptr<CRelation>> &
 }
 
 
-shared_ptr<CRelation> CRename::evaluate(vector<shared_ptr<CRelation>> & relations){
+shared_ptr<CRelation> CRename::evaluate(const vector<shared_ptr<CRelation>> & relations){
     shared_ptr<CRelation> sptr1 = importRelation(relations[0]);
     CRelation res;
     res = *evaluateAtributes(relations);

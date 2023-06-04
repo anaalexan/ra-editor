@@ -3,9 +3,7 @@
 
 /** Class for evaluation of comparing operator with input string */
 class CCompareOperator{
-    protected:
-        CCompareOperator() = default;
-
+    public:
         /**
 	 * Method evaluate comparison operator with input string from user
 	 * @param[in] l left operand of comparison, can be int ,float, double or string  

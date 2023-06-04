@@ -52,5 +52,5 @@ CStringConvert::m_variant CStringConvert::whatType(string str){
         
     }else{
         return str;         
-    }
+    }                                                                   
 }
