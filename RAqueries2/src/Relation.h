@@ -11,7 +11,7 @@ class CRelation{
     public:
         CRelation() = default;
         CRelation (const string & path) // Constructor
-		:m_path(path), m_rows(){};
+		:m_rows(), m_path(path){};
         
         /**
 	    * Method get path from where the data imported */

@@ -1,0 +1,52 @@
+Tato semestrální práce patří do kategorie interaktivních aplikací. Vaším cílem je vytvořit aplikaci, kterou bude uživatel interaktivně ovládat (např. pomocí příkazů na standardním vstupu). Případné parametry aplikace se nesnažte definovat přímo v kódu (a to ani pomocí konstant). Umístěte je do konfiguračních souborů (jednoho nebo více), které váš program bude načítat.
+
+Dotazování pomocí SQL dotazů je dnes běžnou praxí, ale relační algebra příliš podporovaná není, přestože určité typy dotazů jsou snáze realizovatelné v RA než v SQL.
+
+Vaším cílem je implementovat program, který takové dotazy nad datovými zdroji podporuje. Jednotlivé zdroje (relace, tabulky) a výsledky dotazů je možné ukládat do proměnných a tyto proměnné následně využívat v dalších dotazech.
+
+Program musí implementovat následující funkcionality:
+
+    Práce s CSV soubory (především načtení do proměnné a vypsání obsahu).
+
+    Základní operace: projekce a přejmenování (výběr a přejmenování sloupců), selekce (výběr řádků), přirozené a obecné spojení.
+
+    Množinové operace: sjednocení, průnik, rozdíl, kartézský součin.
+
+    Převod dotazu v relační algebře na validní SQL dotaz.
+
+    Jednotlivé proměnné je možné uložit do souboru v (textově čitelné) CSV formě.
+
+    Uložení v rámci proměnných musí být paměťově efektivní. Není dobrý nápad načítat celé CSV do paměti, stejně tak držet v paměti výsledky všech dotazů. Při ukládání proměnné do paměti se musí určit typ dané proměnné. Rozlišujte alespoň CSV soubor (proměnná obsahuje CSV soubor, který je uložen na disku) a složený výraz (kombinace různých proměnných a operací). Obsah souborů načítejte jen pokud je to nutné a pouze ty části, které nutně potřebujete.
+
+Dále aplikace musí zpracovávat výrazy dle jednoho z následujících principů:
+
+    Množinové operace (alespoň sjednocení, průnik, rozdíl a kartézský součin) musí jít vnořovat pomocí závorek (př. ("animals.csv" ∪ X) × Y), závorky mohou být libovolně vnořené. Složitější operace (přijímající parametry) mohou fungovat formou individuálních příkazů bez dalšího skládání (př. A = rename ANIMALS "nazev" → "jmeno").
+
+    Pro zapisování výrazů využijte prefixový (nebo postfixový) zápis, mají tu výhodu, že nevyžadují závorky a snáze se zpracovávají. V tomto případě však veškeré operace a funkce musí jít zapsat v jednom výrazu (př. A = rename CROSS Y UNION "animals.csv" X "nazev" "jmeno").
+
+Ukázka běhu programu: (nezávazný příklad)
+
+IMPORT ZVIRATA "zvirata.csv"
+IMPORT POTRAVA "potrava.csv"
+TMP = ("animals.csv" ∪ ZVIRATA) × POTRAVA)
+CROSS = TMP["zvire", "potrava"]
+PRINT CROSS
+EXPORT CROSS "cross.csv"
+
+Kde lze využít polymorfismus? (doporučené)
+
+    reprezentace objektů: tabulka v CSV souboru, výraz, …
+
+    operace: sjednocení, průnik, rozdíl, kartézský součin, …
+
+    formáty importu a exportu: CSV, JSON, XML, SQLite, PostgreSQL …
+
+    uživatelské rozhraní: konzole, ncurses, SDL, OpenGL (různé varianty), …
+
+Další informace:
+
+    https://en.wikipedia.org/wiki/Relational_algebra
+
+    Pro parsování výrazu se může hodit Shunting-Yard algoritmus (http://en.wikipedia.org/wiki/Shunting-yard_algorithm).
+
+    Pro uložení do souboru můžete využít i databázi, v takovém případě dejte uživateli na výběr.
