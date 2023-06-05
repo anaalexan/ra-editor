@@ -29,7 +29,6 @@ vector<string> CNaturalJoin::relevantAtribute(const vector<shared_ptr<CRelation>
     row1 = importAtributes(relations[0]);
     row2 = importAtributes(relations[1]);
     bool isHere = false;
-    size_t rel2;
      //looking for the common attribute between the relations
     for(size_t i = 0; i < row1.m_values.size(); i++){
         for(size_t j = 0; j < row2.m_values.size(); j++){

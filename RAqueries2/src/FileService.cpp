@@ -42,7 +42,6 @@ CRow CFileService::importAtriburesFromFile(const shared_ptr<CRelation> & data){
         string sError = "Error. Empty file.";
         throw sError;
     }
-    size_t i = 0;
     stringstream ss(line);
     while (getline(ss, word, ',')){
         row.m_values.push_back(word);

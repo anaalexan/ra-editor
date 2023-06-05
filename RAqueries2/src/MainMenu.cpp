@@ -12,7 +12,7 @@ CMainMenu::CMainMenu(){
 }
 
 CMenuBase * CMainMenu::getNextMenu(int choice, bool & isExitSelected){
-        CMenuBase * nextMenu = nullptr;
+        CMenuBase * nextMenu = 0;
 
         switch (choice){
             case 1:{

@@ -42,8 +42,10 @@ pair<bool,vector<string>> CProjection::toSQL(const vector<pair<bool,vector<strin
 
 vector<string> CProjection::relevantAtribute(const vector<shared_ptr<CRelation>> & relations){
     vector<string> vec;
-    for(size_t i = 0; i < m_columnNames.size(); i++){
-        vec.push_back(m_columnNames[i]);
+    if((relations[0]->getPath().size() != 0) || (relations[0]->m_rows[0].m_values.size() !=0 )){
+        for(size_t i = 0; i < m_columnNames.size(); i++){
+            vec.push_back(m_columnNames[i]);
+        }
     }
     return vec;
 }
@@ -161,7 +163,6 @@ shared_ptr<CRelation> CProjection::evaluate(const string & path){
         isHere = false;
 
         //cheking for duplicates rows
-        size_t cntRows = res.m_rows.size();
         for(size_t i = 1; i < res.m_rows.size(); i++){
             size_t sizeRow = res.m_rows[i].m_values.size();
             string nevim = res.m_rows[i].m_values[0];

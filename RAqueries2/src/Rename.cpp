@@ -45,8 +45,10 @@ pair<bool,vector<string>> CRename::toSQL(const vector<pair<bool,vector<string>>>
 
 vector<string> CRename::relevantAtribute(const vector<shared_ptr<CRelation>> & relations){
     vector<string> vec;
-    for(size_t i = 0; i < m_oldNewNames.size(); i++){
-        vec.push_back(m_oldNewNames[i].first);
+    if((relations[0]->getPath().size() != 0) || (relations[0]->m_rows[0].m_values.size() !=0 )){
+        for(size_t i = 0; i < m_oldNewNames.size(); i++){
+            vec.push_back(m_oldNewNames[i].first);
+        }
     }
     return vec;
 }
@@ -58,19 +60,15 @@ shared_ptr<CRelation> CRename::evaluateAtributes(const vector<shared_ptr<CRelati
     row1 = importAtributes(relations[0]);
     CRelation res;
     CRow row;
-    bool isHere = false;
    
     size_t sizeRow = row1.m_values.size();
-    size_t cntNewName = 0;
     for(size_t cnt = 0; cnt < sizeRow; cnt++){
-        isHere == false;
 
         //copy new name for atributes that need to be changed,
         for( size_t n = 0; n < m_oldNewNames.size(); n++){
             if(m_oldNewNames[n].first == row1.m_values[cnt]){
                         
                 row.m_values.push_back(m_oldNewNames[n].second);
-                isHere = true;
                 m_oldNewNames.erase(std::next(m_oldNewNames.begin(), n));
                 break;
             }

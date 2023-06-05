@@ -44,9 +44,12 @@ pair<bool,vector<string>> CSelection::toSQL(const vector<pair<bool,vector<string
 
 vector<string> CSelection::relevantAtribute(const vector<shared_ptr<CRelation>> & relations){
     vector<string> vec;
-    vec.push_back(m_conditions.left);
-    if(m_conditions.right[0] != '\''){
-        vec.push_back(m_conditions.right); 
+     if((relations[0]->getPath().size() != 0) || (relations[0]->m_rows[0].m_values.size() !=0 )){
+        vector<string> vec;
+        vec.push_back(m_conditions.left);
+        if(m_conditions.right[0] != '\''){
+            vec.push_back(m_conditions.right); 
+        }
     }
     return vec;
 }

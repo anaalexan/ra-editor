@@ -49,7 +49,7 @@ shared_ptr<CRelation> CDifference::evaluate(const vector<shared_ptr<CRelation>> 
 
     
     bool same = false;
-    int dif_cnt = 0;
+    size_t dif_cnt = 0;
     //first(0.) row it is the names of the atributes
      // copy 0.row into final relation 
 

@@ -12,23 +12,17 @@ void CApplication::run(){
 
         int choice;
         choice = aCurrentMenu->execute();
-        CMenuBase * aNewMenuPointer;
+        
         try
             {
-               aNewMenuPointer = aCurrentMenu->getNextMenu(choice, isExitSelected); 
+               CMenuBase * aNewMenuPointer = aCurrentMenu->getNextMenu(choice, isExitSelected);
+        
+                delete aCurrentMenu;
+                aCurrentMenu = aNewMenuPointer;
             }
             catch(string sError)
             {
                 cerr << sError << endl;
-            }
-        
-
-        
-
-        if (aNewMenuPointer)
-        {
-            delete aCurrentMenu;
-            aCurrentMenu = aNewMenuPointer;
-        }
+            }     
     }
 }

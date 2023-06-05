@@ -26,9 +26,7 @@ vector<string> CExpression::translateToSQL(){
     vector<pair<bool,vector<string>>> stack;
     size_t index = 0;
     for(size_t i = 0; i < m_tokens.size(); i++){
-        size_t siz = m_tokens.size();
         if(m_tokens[i]->m_type ==  CToken::ETokenType::RELATION){
-            bool isTMPres = false;
             vector<string> vec;
             string path = m_tokens[i]->m_relation->getPath();
             vec.push_back(path);

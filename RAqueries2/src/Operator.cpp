@@ -4,7 +4,11 @@ string tab = "    ";
 
 vector<string> COperator::relevantAtribute(const vector<shared_ptr<CRelation>> & relations){
     vector<string> vec;
-    return vec;
+    if(relations[0]->getPath().size() != 0){
+        return vec;
+    }else{
+        return vec;
+    }
 }
 
 shared_ptr<CRelation> COperator::importRelation(const shared_ptr<CRelation> & relation){

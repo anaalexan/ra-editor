@@ -28,6 +28,7 @@ CMenuBase * CMenuRAtoSQL::getNextMenu(int choice, bool & isExitSelected){
             case 1:
             {
                 nextMenu = new CMainMenu;
+                isExitSelected = false;
             }
 
         }

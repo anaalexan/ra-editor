@@ -52,7 +52,7 @@ shared_ptr<CRelation> CUnion::evaluate(const vector<shared_ptr<CRelation>> & rel
     }
 
     bool same = false;
-    int dif_cnt = 0;
+    size_t dif_cnt = 0;
     for(size_t row2 = 1; row2 < sptr2->m_rows.size(); row2++){
         same = false;
         dif_cnt = 0;

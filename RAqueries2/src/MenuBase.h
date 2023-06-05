@@ -10,7 +10,7 @@ using namespace std;
 class CMenuBase{       
     public:
         CMenuBase(){ m_menuText = "error in constructor";}
-        
+        virtual ~CMenuBase(){}; 
         /**
 	 * Method evaluate expression for 1 or 2(binary operator) operand/s
 	 * @param[in] choice int from input by user with the number of next menu selected.

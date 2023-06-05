@@ -47,8 +47,6 @@ shared_ptr<CRelation> CIntersection::evaluate(const vector<shared_ptr<CRelation>
 
     CRelation res;
     bool same = false;
-    bool dif = false;
-    int dif_cnt = 0;
     //first(0.) row it is the names of the atributes
      // copy 0.row into final relation 
 
@@ -56,7 +54,6 @@ shared_ptr<CRelation> CIntersection::evaluate(const vector<shared_ptr<CRelation>
 
     for(size_t row1 = 1; row1 < sptr1->m_rows.size(); row1++){
         same = false;
-        dif_cnt = 0;
         for(size_t row2 = 1; row2 < sptr2->m_rows.size(); row2++){
 
             // it does not matter wich one relation we take or wich row in that relation, 

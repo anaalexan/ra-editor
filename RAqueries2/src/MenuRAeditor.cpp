@@ -11,27 +11,48 @@
 #include "Variable.h"
 
 using namespace std;
-
 CMenuRAeditor::CMenuRAeditor(){
         m_menuText = string("RA editor\n"
             "For return to main menu write EXIT.\n");
 }
 
 void CMenuRAeditor::printResult(shared_ptr<CRelation> data) {
+    
     if(data->m_rows.size() == 0){
-        string sError = "Error. There is no information in this file/relation.";
-        throw sError;
-    }
-    for(size_t i = 0; i < data->m_rows.size(); i++)
-        for(size_t j = 0; j < data->m_rows.begin()->m_values.size(); j++){
-            if(j != 0){
-                cout << ",";
+        if(data->getPath().size() != 0){
+            ifstream fin(data->getPath());
+            string line, word;
+            CRow row;
+            if(!fin.is_open()){
+                string sError = "Error. Cannot open file: " + data->getPath();
+                throw  sError;
             }
-            cout << data->m_rows[i].m_values[j];
-            if(j == data->m_rows.begin()->m_values.size() - 1){
-                cout << "\n";
+
+            while (getline(fin, line)){
+                if(line.size() == 0){
+                    string sError = "Error. Empty file.";
+                    throw sError;
+                }
+                cout << line << endl;
             }
+            fin.close();
+        }else{
+            string sError = "Error. There is no information in this file/relation.";
+            throw sError; 
         }
+        
+    }else{
+        for(size_t i = 0; i < data->m_rows.size(); i++)
+            for(size_t j = 0; j < data->m_rows.begin()->m_values.size(); j++){
+                if(j != 0){
+                    cout << ",";
+                }
+                cout << data->m_rows[i].m_values[j];
+                if(j == data->m_rows.begin()->m_values.size() - 1){
+                    cout << "\n";
+                }
+            }
+    }
 }
 
 string CMenuRAeditor::noQuots(string word){
@@ -230,6 +251,8 @@ CMenuBase * CMenuRAeditor::getNextMenu(int choice, bool & isExitSelected){
             case 1:
             {
                 nextMenu = new CMainMenu;
+                isExitSelected = false;
+                break;
             }
 
         }
