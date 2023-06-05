@@ -281,12 +281,11 @@ void CExpression::tokenize(const string & expression, const vector<CVariable> & 
                 string word;
 
                 while(i < expression.size()-1 &&  expression[i+1] != ' ' && expression[i+1] != '(' && expression[i+1] != '[' && expression[i+1] != '<' && expression[i+1] != '*'
-                && expression[i+1] != '^' && expression[i+1] != '&' && expression[i+1] != '+' && expression[i+1] != '-' && expression[i+1] != 'x'){
+                && expression[i+1] != '^' && expression[i+1] != '&' && expression[i+1] != '+' && expression[i+1] != '-' && expression[i+1] != 'x' && expression[i+1] != '"' ){
                     word.push_back(expression[i]);
                     i++;
                 }
                 word.push_back(expression[i]);
-                i++;
                 bool isHere = false;
                 for(size_t j = 0; j < variables.size(); j++){
                     string varName = variables[j].m_name;
@@ -298,7 +297,7 @@ void CExpression::tokenize(const string & expression, const vector<CVariable> & 
                         break;
                     }
                     if(j == variables.size()-1 && isHere == false){
-                        string sError = "There is no variable with the name: " + varName;
+                        string sError = "There is no variable with the name: " + word;
                         throw sError;
                     }
                 }

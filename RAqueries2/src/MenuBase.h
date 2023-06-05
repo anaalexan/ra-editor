@@ -3,6 +3,7 @@
 #include <iostream>
 #include <string>
 #include <algorithm>
+#include <limits>
 #include "Keywords.h"
 
 using namespace std;
@@ -30,6 +31,12 @@ class CMenuBase{
             printText();
             int choice = 0;
             cin >> choice;
+            if(cin.fail()){
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                string sError = "Incorrect input.";
+                throw sError;
+            }
             return choice;
         }
     protected:

@@ -1,56 +1,40 @@
-TARGET = aleksana
+CXXFLAGS = -Wall -pedantic -std=c++17
 
-CXX = g++
-MKDIR = mkdir -p
-
-CXXFLAGS = -Wall -pedantic -Wextra -std=c++17 -fsanitize=address -g
-
-SOURCE_DIR = src
-BUILD_DIR = build
-
-SOURCES = $(wildcard $(SOURCE_DIR)/*.cpp)
-HEADERS = $(wildcard $(SOURCE_DIR)/*.h)
-
-OBJECTS = $(SOURCES:$(SOURCE_DIR)/%.cpp=$(BUILD_DIR)/%.o)
-
+HEADERS = $(wildcard src/*.h)
+SOURCES = $(wildcard src/*.cpp)
+OBJECTS = $(SOURCES:src/%.cpp=build/%.o)
 
 .PHONY: all
 all: compile doc
-	@echo "Finished..."
-
-
-.PHONY: compile
-compile: $(TARGET)
-	@echo "Compile..."
-
 
 .PHONY: run
-run: $(TARGET)
-	./$(TARGET)
+run: compile
+	./aleksana
 
+.PHONY: compile
+compile: aleksana
 
-$(TARGET): $(OBJECTS)
-	$(CXX) $^ -o $@
+aleksana: build/main
+	cp $< $@
 
+build/main: $(OBJECTS)
+	mkdir -p $(@D)
+	g++ $^ -o $@
 
-$(BUILD_DIR)/%.o: $(SOURCE_DIR)/%.cpp
-	$(MKDIR) $(BUILD_DIR)
-	$(CXX) $(CXXFLAGS) $< -c -o $@
+build/%.o: src/%.cpp
+	mkdir -p $(@D)
+	g++ $(CXXFLAGS) $< -c -o $@
 
+debug/%.test: tests/%.test.cpp $(filter-out build/main.o,$(OBJECTS))
+	mkdir -p $(@D)
+	g++ $(CXXFLAGS) $< $(filter-out build/main.o,$(OBJECTS)) -I src/ -o $@
 
-doc: Doxyfile README.md $(HEADERS)
+doc: Doxyfile $(HEADERS)
 	doxygen Doxyfile
-
-EXAMPLES = $(wildcard examples/*)
-$(TARGET).zip: README.md zadani.txt prohlaseni.txt Makefile Doxyfile $(HEADERS) $(SOURCES) $(EXAMPLES)
-	mkdir -p .archive/$(TARGET)/
-	cp -r README.md zadani.txt prohlaseni.txt Makefile Doxyfile src/ examples/ .archive/$(TARGET)/
-	cd .archive/; zip -r ../$(TARGET).zip $(TARGET)/
-	rm -r .archive/
 
 .PHONY: clean
 clean:
-	rm -rf $(TARGET) $(TARGET).zip doc/ .archive/ $(BUILD_DIR)/ 2>/dev/null
+	rm -rf username build/ debug/ doc/ 2>/dev/null
 
 
 # Dependencies

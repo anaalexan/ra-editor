@@ -42,7 +42,8 @@ void CMenuRAeditor::printResult(shared_ptr<CRelation> data) {
         }
         
     }else{
-        for(size_t i = 0; i < data->m_rows.size(); i++)
+        cout << "\n";
+        for(size_t i = 0; i < data->m_rows.size(); i++){
             for(size_t j = 0; j < data->m_rows.begin()->m_values.size(); j++){
                 if(j != 0){
                     cout << ",";
@@ -52,7 +53,10 @@ void CMenuRAeditor::printResult(shared_ptr<CRelation> data) {
                     cout << "\n";
                 }
             }
+        }
+        cout << "\n";
     }
+
 }
 
 string CMenuRAeditor::noQuots(string word){
@@ -136,10 +140,6 @@ int CMenuRAeditor::execute(){
                     size_t i = key.size()+1;
                     int cnt = 0;
                     while(line[i] != '>' && cnt == 0 && i < line.size()){
-                        if(line[i] == ' ' ){
-                            i++;
-                            continue;
-                        }
                         if(line[i] == '<'){
                             cnt++;
                         }

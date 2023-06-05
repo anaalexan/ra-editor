@@ -31,6 +31,7 @@ CConditionParser::CCondition CConditionParser::parse(const string & condition){
         word.push_back(condition[i]);
         i++;
     }
+    
     if(condition[i] == '>' || condition[i] ==  '<' || condition[i] == '=' || condition[i] == '!' || condition[i] == ' '){
             
         con.left = word;
@@ -46,6 +47,11 @@ CConditionParser::CCondition CConditionParser::parse(const string & condition){
         }
         con.m_operator = stringToEnum(op);
         op.clear();
+    }
+    if(con.m_operator != eEqual && con.m_operator != eNotEqual && con.m_operator != eLess && con.m_operator != eLessOrEqual 
+    && con.m_operator != eGreater && con.m_operator != eGreaterOrEqual){
+        string sError = "Error wrong comparison operator.\nIt should be one of: >, <, <=, >=, ==, !=";
+        throw sError;
     }
     while(condition[i] == ' '){
         i++;

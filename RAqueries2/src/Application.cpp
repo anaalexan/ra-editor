@@ -10,11 +10,11 @@ void CApplication::run(){
     bool isExitSelected = false;
     while (!isExitSelected){
 
-        int choice;
-        choice = aCurrentMenu->execute();
+        int choice;        
         
         try
             {
+                choice = aCurrentMenu->execute();
                CMenuBase * aNewMenuPointer = aCurrentMenu->getNextMenu(choice, isExitSelected);
         
                 delete aCurrentMenu;

@@ -32,7 +32,7 @@ CMenuBase * CMainMenu::getNextMenu(int choice, bool & isExitSelected){
                 break;
             }
             default:{
-                string sError = "Error. Please choose number from 1 to 4";
+                string sError = "Please choose number from 1 to 4.";
                 throw sError;
             }
         }
