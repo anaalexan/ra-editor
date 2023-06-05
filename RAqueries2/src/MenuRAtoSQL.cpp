@@ -36,14 +36,6 @@ CMenuBase * CMenuRAtoSQL::getNextMenu(int choice, bool & isExitSelected){
         return nextMenu;
 }
 
-/*EKeywords CMenuRAtoSQL::stringToEnum(const string & word){
-    if(word == "EXIT"){
-        return EKeywords::eEXIT;
-    }
-    return EKeywords::eNoMatch;
-}*/
-
-
 
 int CMenuRAtoSQL::execute(){
     printText();

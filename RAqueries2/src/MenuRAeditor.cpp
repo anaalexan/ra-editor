@@ -70,32 +70,6 @@ string CMenuRAeditor::noQuots(string word){
     return newWord;
 }
 
-/*EKeywords CMenuRAeditor::stringToEnum(const string & word){
-    if(word == "EXIT"){
-        return EKeywords::eEXIT;
-    }
-    if(word == "IMPORT"){
-        return EKeywords::eIMPORT;
-    }
-    if(word == "PRINT"){
-        return EKeywords::ePRINT;
-    }
-    if(word == "EXPORT"){
-        return EKeywords::eEXPORT;
-    }
-    if(word == "TRANSLATE"){
-        return EKeywords::eTRANSLATE;
-    }
-    return EKeywords::eNoMatch;
-}*/
-
-/*string toUpperCase(string input){
-    for(auto i = input.begin(); i < input.end(); i++){
-        std::transform(input.begin(), input.end(), input.begin(), ::toupper);
-    }
-    return input;
-}*/
-
 int CMenuRAeditor::execute(){
     printText();
     
